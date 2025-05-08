@@ -5,7 +5,7 @@ import QuestionCard from "@/components/form";
 import { questions } from "@/data/questions";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Building2, Handshake, Landmark, Store, User } from "lucide-react";
-import Image from "next/image";
+import BackIcon from "@/components/icons/back-icon";
 
 
 const NAV_STEPS = [
@@ -26,7 +26,7 @@ function getStep(current) {
 function IgniteLogo() {
   return (
     <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-blue-900 to-blue-400 text-white font-extrabold text-3xl select-none">
-      V
+      P {/* TODO: Add logo text or icon here  */}
     </span>
   );
 }
@@ -70,7 +70,7 @@ export default function Home() {
         <div className="flex items-center gap-2 md:gap-4">
           <IgniteLogo />
           <span className="ml-2 text-xl font-bold text-blue-900 hidden sm:inline">
-            Velocitybusinessfunding
+            ProsperityBusinessFinance
           </span>
         </div>
       </nav>
@@ -83,7 +83,7 @@ export default function Home() {
           <div className="w-full flex justify-center py-1 relative z-10">
             <div className="w-1/3 bg-gray-100 h-1.5 dark:bg-gray-300 rounded-full overflow-hidden">
               <div
-                className="bg-violet-500 h-1.5 transition-all duration-500 ease-out"
+                className="bg-green-600 h-1.5 transition-all duration-500 ease-out"
                 style={{ width: `${progressPercentage}%` }}
               ></div>
             </div>
@@ -94,11 +94,12 @@ export default function Home() {
       <div className="flex-1 flex items-center justify-center px-2 py-4 relative z-10">
         {showThankYou ? (
           <div className="bg-white rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
-            <span className="text-5xl mb-4"><DotLottieReact
-              src="https://lottie.host/11d669c7-fafa-4178-aa75-e7f049043458/kYRVP6FYqF.lottie"
+            <DotLottieReact
+              src="https://lottie.host/a0285ded-f43b-4af6-9edd-ec684f80071f/t5RejRJf3j.lottie"
               loop
               autoplay
-            /></span>
+              mute
+            />
             <h2 className="text-2xl font-bold text-blue-900 mb-2">
               Your responses have been recorded
             </h2>
@@ -107,9 +108,9 @@ export default function Home() {
         ) : showTransition ? (
           <div className="flex items-center justify-center">
             <DotLottieReact
-              src="https://lottie.host/806cf670-ba88-45d5-8da0-ba123cfc08b6/nnocF9u5I9.lottie"
-              autoplay
+              src="https://lottie.host/b2288875-3cdf-4548-ae1d-cb2c069fc101/DxxhmKZQtP.lottie"
               loop
+              autoplay
               mute
               playbackSpeed={1.5}
               style={{ width: 200, height: 200 }}
@@ -120,18 +121,18 @@ export default function Home() {
             {current === 0 && (
               <section className="text-gray-700 body-font mb-8">
                 <div className="container px-5 py-6 mx-auto text-center">
-                  <h2 className="text-2xl font-bold text-violet-800 mb-6">What type of business do you own?</h2>
+                  <h2 className="text-2xl font-bold text-green-800 mb-6">What type of business do you own?</h2>
                   <div className="flex flex-wrap justify-center gap-4">
                     {["Sole Proprietor", "Partnership", "Limited Liability Company (LLC)", "C Corporation", "S Corporation"].map((type, index) => {
                       const Icon = [User, Handshake, Landmark, Building2, Store][index];
                       return (
                         <div
                           key={index}
-                          className="cursor-pointer border-2 border-violet-600 w-64 px-6 py-4 rounded-xl text-center shadow-md transform transition duration-300 hover:scale-105 hover:bg-violet-100 flex flex-col items-center gap-3"
+                          className="cursor-pointer border-2 border-green-600 w-64 px-6 py-4 rounded-xl text-center shadow-md transform transition duration-300 hover:scale-105 hover:bg-green-100 flex flex-col items-center gap-3"
                           onClick={() => handleSelect(type)}
                         >
-                          <Icon className="text-violet-700" size={32} />
-                          <p className="text-lg font-medium text-violet-800">{type}</p>
+                          <Icon className="text-green-700" size={32} />
+                          <p className="text-lg font-medium text-green-800">{type}</p>
                         </div>
                       );
                     })}
@@ -145,7 +146,7 @@ export default function Home() {
                 <p className="text-lg text-blue-900 font-semibold mb-2 uppercase">How much money do you need?</p>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
 
-                <div className="text-4xl font-bold text-violet-500 mb-4">
+                <div className="text-4xl font-bold text-green-600 mb-4">
                   ${Number(answers[questions[current].id] || 640000).toLocaleString()}
                 </div>
 
@@ -163,12 +164,12 @@ export default function Home() {
                   }
                   className="w-full h-1 appearance-none bg-gray-200 rounded-lg cursor-pointer"
                   style={{
-                    background: `linear-gradient(to right, #8b5cf6 ${((answers[questions[current].id] || 640000) - 10000) / (1000000 - 10000) * 100
+                    background: `linear-gradient(to right, #6cf5be ${((answers[questions[current].id] || 640000) - 10000) / (1000000 - 10000) * 100
                       }%, #e5e7eb 0%)`,
                   }}
                 />
 
-                <div className="flex justify-between text-sm text-sky-700 mt-2">
+                <div className="flex justify-between text-sm mt-2" style={{ color: "#33336a" }}>
                   <span>$10,000</span>
                   <span>$1,000,000+</span>
                 </div>
@@ -181,12 +182,13 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -194,9 +196,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -248,12 +252,13 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-2 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -261,9 +266,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -278,8 +285,8 @@ export default function Home() {
                   {["Within a week", "Within 2 weeks", "Within 1 month", "Unsure"].map((option) => (
                     <div
                       key={option}
-                      className={`cursor-pointer border-2 border-violet-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-violet-100
-            ${answers[questions[current].id] === option ? "bg-violet-100" : "bg-white"}`}
+                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
@@ -289,7 +296,7 @@ export default function Home() {
                         }, 600);
                       }}
                     >
-                      <p className="text-lg font-medium text-violet-800">{option}</p>
+                      <p className="text-lg font-medium text-green-800">{option}</p>
                     </div>
                   ))}
                 </div>
@@ -297,6 +304,7 @@ export default function Home() {
                 {fieldError && <div className="text-red-600 mt-3">{fieldError}</div>}
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -304,9 +312,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -331,8 +341,8 @@ export default function Home() {
                         setFieldError("Please enter a value less than $10 million.");
                       }
                     }}
-                    className={`w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-          ${fieldError ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter amount"
                   />
                 </div>
@@ -353,12 +363,13 @@ export default function Home() {
                       setCurrent((c) => c + 1); // Move to next question
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -366,9 +377,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -383,8 +396,8 @@ export default function Home() {
                   {["Excellent (720+)", "Good (680 - 719)", "Fair (640 - 679)", "Poor (639 or less)"].map((option) => (
                     <div
                       key={option}
-                      className={`cursor-pointer border-2 border-violet-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-violet-100
-            ${answers[questions[current].id] === option ? "bg-violet-100" : "bg-white"}`}
+                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
@@ -394,7 +407,7 @@ export default function Home() {
                         }, 600);
                       }}
                     >
-                      <p className="text-lg font-medium text-violet-800">{option}</p>
+                      <p className="text-lg font-medium text-green-800">{option}</p>
                     </div>
                   ))}
                 </div>
@@ -402,6 +415,7 @@ export default function Home() {
                 {fieldError && <div className="text-red-600 mt-3">{fieldError}</div>}
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -409,9 +423,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -432,8 +448,8 @@ export default function Home() {
                     type="text"
                     value={answers.businessName || ''}
                     onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-          ${fieldError.businessName ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your business name"
                   />
                   {fieldError.businessName && (
@@ -448,8 +464,8 @@ export default function Home() {
                     type="text"
                     value={answers.businessZip || ''}
                     onChange={(e) => setAnswers({ ...answers, businessZip: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-          ${fieldError.businessZip ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter 5-digit ZIP code"
                   />
                   {fieldError.businessZip && (
@@ -480,12 +496,13 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -493,9 +510,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -513,8 +532,8 @@ export default function Home() {
                   <select
                     value={answers.startMonth || ''}
                     onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.startMonth ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.startMonth ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select month</option>
                     {[
@@ -534,8 +553,8 @@ export default function Home() {
                   <select
                     value={answers.startYear || ''}
                     onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.startYear ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.startYear ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select year</option>
                     {Array.from({ length: 30 }, (_, i) => {
@@ -567,13 +586,14 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 {/* Back Button */}
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -581,9 +601,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -600,8 +622,8 @@ export default function Home() {
                   <select
                     value={answers.industry || ''}
                     onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.industry ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.industry ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select an industry</option>
                     <option>Accommodation and Food Services</option>
@@ -647,13 +669,14 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 {/* Back Button */}
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -661,9 +684,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -682,8 +707,8 @@ export default function Home() {
                     type="text"
                     value={answers.firstName || ''}
                     onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.firstName ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.firstName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your first name"
                   />
                   {fieldError.firstName && (
@@ -698,8 +723,8 @@ export default function Home() {
                     type="text"
                     value={answers.lastName || ''}
                     onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.lastName ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.lastName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your last name"
                   />
                   {fieldError.lastName && (
@@ -739,8 +764,8 @@ export default function Home() {
                       setAnswers({ ...answers, phoneNumber: formatted });
                     }}
                     placeholder="(814) 222-2222"
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.phoneNumber ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.phoneNumber ? "bg-red-200" : "border-green-600"}`}
                   />
                   {fieldError.phoneNumber && (
                     <div className="text-red-600 mt-1">{fieldError.phoneNumber}</div>
@@ -777,13 +802,14 @@ export default function Home() {
                       setCurrent((c) => c + 1);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Continue
                 </button>
 
                 {/* Back Button */}
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -791,9 +817,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -811,8 +839,8 @@ export default function Home() {
                     type="email"
                     value={answers.email || ''}
                     onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 
-        ${fieldError.email ? "bg-red-200" : "border-violet-600"}`}
+                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+        ${fieldError.email ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your email"
                   />
                   {fieldError.email && (
@@ -842,13 +870,14 @@ export default function Home() {
                       setShowThankYou(true);
                     }, 600);
                   }}
-                  className="mt-6 px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-800 transition"
+                  className="btn-glosmophobic"
                 >
                   Submit
                 </button>
 
                 {/* Back Button */}
                 <button
+                  type="button"
                   onClick={() => {
                     setShowTransition(true);
                     setTimeout(() => {
@@ -856,9 +885,11 @@ export default function Home() {
                       setCurrent((c) => c - 1);
                     }, 600);
                   }}
-                  className="mt-4 text-sm text-violet-700 underline block"
+                  aria-label="Go back"
+                  className="btn-back group"
                 >
-                  ← Back
+                  <BackIcon className="w-8 h-9.5" />
+                  <span>Back</span>
                 </button>
               </div>
             )}
@@ -894,14 +925,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
           <div className="flex flex-col items-center mb-4">
             <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-900 to-blue-400 text-white font-extrabold text-4xl select-none mb-2">
-              V
+              P {/*TODO: Add logo here */}
             </span>
             <span className="text-2xl font-bold text-blue-900">
-              Velocitybusinessfunding
+              ProsperityBusinessFinance
             </span>
           </div>
           <div className="text-gray-400 text-sm text-center">
-            © {new Date().getFullYear()} Velocitybusinessfunding. All rights reserved.
+            © {new Date().getFullYear()} ProsperityBusinessFinance . All rights reserved.
           </div>
         </div>
       </footer>
