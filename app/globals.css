@@ -4,6 +4,35 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
+
+/* Ensure the main container takes up the full height of the viewport */
+main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+/* Push the footer to the bottom */
+footer {
+  margin-top: auto; /* Push footer to the bottom when content is short */
+}
+
+.flex-1 {
+  flex: 1; /* Allow the content area to grow and fill the space */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly opaque background */
+    z-index: 10; /* Ensure it stays above other content */
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -117,7 +146,7 @@ input[type='range'] {
     border-radius: 0.5rem; /* Rounded corners */
     font-size: 1rem; /* Base font size */
     line-height: 1.5rem; /* Adjust line height */
-    color: #00a79d; /* Text color matching the primary color */
+    color: #ffffff; /* Text color matching the primary color */
     font-weight: 600; /* Font-semibold */
     outline: none; /* Removes default outline */
     transition: box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease; /* Smooth transition */
@@ -161,4 +190,38 @@ input[type='range'] {
 .btn-back:focus {
   outline: none; /* Remove default outline */
   box-shadow: 0 0 8px rgba(0, 167, 157, 0.5); /* Focus ring */
+}
+
+.vanta-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; 
+  background-color: #ffffff; /* Fallback color */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .vanta-bg {
+    /* min-height: 100vh;  */
+    height: 100vh; 
+  }
+}
+
+.questionHeading {
+  font-size: 2rem; /* Equivalent to text-2xl */
+  font-weight: 700; /* Equivalent to font-semibold */
+  color: #1f2937; /* Equivalent to text-gray-900 */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .questionHeading {
+    font-size: 1.5rem; /* Smaller font size for mobile */
+    font-weight: 600; /* Slightly lighter weight */
+    color: #ffffff; /* Change text color to white on mobile screens */
+  }
 }
