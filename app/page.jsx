@@ -6,6 +6,7 @@ import { questions } from "@/data/questions";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Building2, Handshake, Landmark, Store, User } from "lucide-react";
 import BackIcon from "@/components/icons/back-icon";
+import VantaBackground from "@/components/VantaBackground";
 
 
 const NAV_STEPS = [
@@ -66,6 +67,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col bg-ignite-animated relative min-h-screen">
+      <VantaBackground />
       <nav className="w-full bg-gray-50 border-b border-gray-200 py-3 px-2 flex justify-center items-center gap-2 relative z-10">
         <div className="flex items-center gap-2 md:gap-4">
           <IgniteLogo />
@@ -77,7 +79,7 @@ export default function Home() {
 
       {!showThankYou && (
         <>
-          <div className="text-center text-sm text-gray-600 py-1 relative z-10">
+          <div className="text-center text-sm text-white py-1 relative z-10">
             Question {current + 1} of {totalQuestions}
           </div>
           <div className="w-full flex justify-center py-1 relative z-10">
@@ -93,17 +95,17 @@ export default function Home() {
 
       <div className="flex-1 flex items-center justify-center px-2 py-4 relative z-10">
         {showThankYou ? (
-          <div className="bg-white rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
+          <div className="bg-transparent rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
             <DotLottieReact
               src="https://lottie.host/a0285ded-f43b-4af6-9edd-ec684f80071f/t5RejRJf3j.lottie"
               loop
               autoplay
               mute
             />
-            <h2 className="text-2xl font-bold text-blue-900 mb-2">
+            <h2 className="text-2xl font-bold text-stone-50 mb-2">
               Your responses have been recorded
             </h2>
-            <p className="text-gray-700">We will get back to you soon.</p>
+            <p className="text-stone-200">We will get back to you soon.</p>
           </div>
         ) : showTransition ? (
           <div className="flex items-center justify-center">
@@ -119,20 +121,20 @@ export default function Home() {
         ) : (
           <div className="w-full max-w-4xl">
             {current === 0 && (
-              <section className="text-gray-700 body-font mb-8">
+              <section className="text-stone-200 body-font mb-8">
                 <div className="container px-5 py-6 mx-auto text-center">
-                  <h2 className="text-2xl font-bold text-green-800 mb-6">What type of business do you own?</h2>
+                  <h2 className="questionHeading">{questions[current]?.text || "What type of business do you own?"}</h2>
                   <div className="flex flex-wrap justify-center gap-4">
                     {["Sole Proprietor", "Partnership", "Limited Liability Company (LLC)", "C Corporation", "S Corporation"].map((type, index) => {
                       const Icon = [User, Handshake, Landmark, Building2, Store][index];
                       return (
                         <div
                           key={index}
-                          className="cursor-pointer border-2 border-green-600 w-64 px-6 py-4 rounded-xl text-center shadow-md transform transition duration-300 hover:scale-105 hover:bg-green-100 flex flex-col items-center gap-3"
+                          className="cursor-pointer border-2 border-green-600 w-64 px-6 py-4 rounded-xl text-center shadow-md transform transition duration-300 hover:scale-105 hover:bg-green-100 flex flex-col items-center gap-3 group"
                           onClick={() => handleSelect(type)}
                         >
-                          <Icon className="text-green-700" size={32} />
-                          <p className="text-lg font-medium text-green-800">{type}</p>
+                          <Icon className="text-stone-200 group-hover:text-green-900" size={32} />
+                          <p className="text-lg font-medium text-stone-200 group-hover:text-green-900">{type}</p>
                         </div>
                       );
                     })}
@@ -142,11 +144,10 @@ export default function Home() {
             )}
 
             {current === 1 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2 uppercase">How much money do you need?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "How much do you need?"}</h2>
 
-                <div className="text-4xl font-bold text-green-600 mb-4">
+                <div className="text-4xl font-bold text-green-200 mb-4">
                   ${Number(answers[questions[current].id] || 640000).toLocaleString()}
                 </div>
 
@@ -169,7 +170,7 @@ export default function Home() {
                   }}
                 />
 
-                <div className="flex justify-between text-sm mt-2" style={{ color: "#33336a" }}>
+                <div className="flex justify-between text-sm mt-2 text-green-200">
                   <span>$10,000</span>
                   <span>$1,000,000+</span>
                 </div>
@@ -207,9 +208,8 @@ export default function Home() {
 
             {/* DROPDOWN QUESTION */}
             {current === 2 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What are you getting financing for?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "What are you getting finance for?"}</h2>
 
                 <select
                   value={answers[questions[current].id] || ""}
@@ -219,7 +219,7 @@ export default function Home() {
                       [questions[current].id]: e.target.value,
                     })
                   }
-                  className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                  className="bg-transparent w-full p-3 border border-green-500 rounded-md mb-4"
                 >
                   <option value="" disabled>Select one</option>
                   <option value="Expansion">Expansion</option>
@@ -277,16 +277,14 @@ export default function Home() {
 
             {/* Urgency */}
             {current === 3 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">How quickly do you need the money?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
-
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "How quickly do you need the money?"}</h2>
                 <div className="flex flex-col gap-3">
                   {["Within a week", "Within 2 weeks", "Within 1 month", "Unsure"].map((option) => (
                     <div
                       key={option}
-                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
-            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
+                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100 group
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-transparent"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
@@ -296,7 +294,7 @@ export default function Home() {
                         }, 600);
                       }}
                     >
-                      <p className="text-lg font-medium text-green-800">{option}</p>
+                      <p className="text-lg font-medium text-white group-hover:text-green-900">{option}</p>
                     </div>
                   ))}
                 </div>
@@ -323,9 +321,8 @@ export default function Home() {
 
             {/* What's your average monthly revenue? */}
             {current === 4 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What's your average monthly revenue?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "What's your average monthly revenue?"}</h2>
 
                 {/* ShadCN Input Field */}
                 <div className="mb-4">
@@ -341,7 +338,7 @@ export default function Home() {
                         setFieldError("Please enter a value less than $10 million.");
                       }
                     }}
-                    className={`w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-bold w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
           ${fieldError ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter amount"
                   />
@@ -388,16 +385,15 @@ export default function Home() {
 
             {/* Credit Score */}
             {current === 5 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What's your credit score?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "What is your personal credit score?"}</h2>
 
                 <div className="flex flex-col gap-3">
                   {["Excellent (720+)", "Good (680 - 719)", "Fair (640 - 679)", "Poor (639 or less)"].map((option) => (
                     <div
                       key={option}
-                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
-            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
+                      className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100 group
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-transparent"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
@@ -407,7 +403,7 @@ export default function Home() {
                         }, 600);
                       }}
                     >
-                      <p className="text-lg font-medium text-green-800">{option}</p>
+                      <p className="text-lg font-medium text-white group-hover:text-green-900">{option}</p>
                     </div>
                   ))}
                 </div>
@@ -435,20 +431,17 @@ export default function Home() {
 
             {/* Business Name and ZIP Code */}
             {current === 6 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Tell us about your business</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                  {questions[current]?.text || ''}
-                </h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "Tell us about your business"}</h2>
 
                 {/* Business Name Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Business Name</label>
+                  <label className="block mb-1 font-medium text-stone-200">Business Name</label>
                   <input
                     type="text"
                     value={answers.businessName || ''}
                     onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
           ${fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your business name"
                   />
@@ -459,12 +452,12 @@ export default function Home() {
 
                 {/* Zip Code Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Business ZIP Code</label>
+                  <label className="block mb-1 font-medium text-stone-200">Business ZIP Code</label>
                   <input
                     type="text"
                     value={answers.businessZip || ''}
                     onChange={(e) => setAnswers({ ...answers, businessZip: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
           ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter 5-digit ZIP code"
                   />
@@ -522,17 +515,16 @@ export default function Home() {
 
             {/* Business Start Date */}
             {current === 7 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                {/* <p className="text-lg text-blue-900 font-semibold mb-2">When did you start your business?</p> */}
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "When did you start your business?"}</h2>
 
                 {/* Month and Year Dropdowns */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Start Month</label>
+                  <label className="block mb-1 font-medium text-stone-200">Start Month</label>
                   <select
                     value={answers.startMonth || ''}
                     onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.startMonth ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select month</option>
@@ -549,11 +541,11 @@ export default function Home() {
                 </div>
 
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Start Year</label>
+                  <label className="block mb-1 font-medium text-stone-200">Start Year</label>
                   <select
                     value={answers.startYear || ''}
                     onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.startYear ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select year</option>
@@ -612,17 +604,16 @@ export default function Home() {
 
             {/* Industry Dropdown */}
             {current === 8 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What industry are you in?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "What industry are you in?"}</h2>
 
                 {/* Industry Dropdown */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Industry</label>
+                  <label className="block mb-1 font-medium text-stone-200">Industry</label>
                   <select
                     value={answers.industry || ''}
                     onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.industry ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select an industry</option>
@@ -696,18 +687,16 @@ export default function Home() {
 
             {/* Personal Info */}
             {current === 9 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Tell us about yourself</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
-
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "Tell us about yourself"}</h2>
                 {/* First Name Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">First Name</label>
+                  <label className="block mb-1 font-medium text-stone-200">First Name</label>
                   <input
                     type="text"
                     value={answers.firstName || ''}
                     onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.firstName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your first name"
                   />
@@ -718,12 +707,12 @@ export default function Home() {
 
                 {/* Last Name Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Last Name</label>
+                  <label className="block mb-1 font-medium text-stone-200">Last Name</label>
                   <input
                     type="text"
                     value={answers.lastName || ''}
                     onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.lastName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your last name"
                   />
@@ -734,7 +723,7 @@ export default function Home() {
 
                 {/* Phone Number Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Phone Number</label>
+                  <label className="block mb-1 font-medium text-stone-200">Phone Number</label>
                   <input
                     type="text"
                     value={answers.phoneNumber || ''}
@@ -764,7 +753,7 @@ export default function Home() {
                       setAnswers({ ...answers, phoneNumber: formatted });
                     }}
                     placeholder="(814) 222-2222"
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.phoneNumber ? "bg-red-200" : "border-green-600"}`}
                   />
                   {fieldError.phoneNumber && (
@@ -828,18 +817,17 @@ export default function Home() {
 
             {/* Contact Details */}
             {current === 10 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Your Contact Details</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || "What is your email address?"}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="questionHeading">{questions[current]?.text || "What is your email address?"}</h2>
 
                 {/* Email Address Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Email Address</label>
+                  <label className="block mb-1 font-medium text-stone-200">Email Address</label>
                   <input
                     type="email"
                     value={answers.email || ''}
                     onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.email ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your email"
                   />
@@ -921,7 +909,7 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="w-full bg-gray-50 border-t border-gray-200 mt-auto relative z-10">
+      <footer className="w-full bg-transparent mt-auto relative z-10">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
           <div className="flex flex-col items-center mb-4">
             <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-900 to-blue-400 text-white font-extrabold text-4xl select-none mb-2">

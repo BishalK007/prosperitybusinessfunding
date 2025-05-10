@@ -1,6 +1,7 @@
 Problems :-
 // Having problem while backing from Pincode
 // Repeating Q 4
+// Slider Components in Questions
  
 Yet to do :-
 1. Change in background
