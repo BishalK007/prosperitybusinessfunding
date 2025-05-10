@@ -1,10 +1,2 @@
 Problems :-
-// Having problem while backing from Pincode
-// Repeating Q 4
-// Slider Components in Questions
- 
-Yet to do :-
-1. Change in background
-2. Change input Field
-3. Change Icon
-4. Color of Navbar and Footer
+// Fix checking US zip code & phoneNumber 

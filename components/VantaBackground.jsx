@@ -21,8 +21,8 @@ const VantaBackground = () => {
                     scale: 1.0,
                     color1: 0x20b1b1,
                     color2: 0x68bd92,
-                    // color1: 0x81dbdb,
-                    // color2: 0x72ffbb,
+                    // color1: 0x7ed681,
+                    // color2: 0x7cd97b,
                     size: 1.00
                 });
                 console.log("Vanta effect initialized:", vantaEffectRef.current);

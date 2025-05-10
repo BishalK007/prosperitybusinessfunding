@@ -179,3 +179,35 @@ input[type='range'] {
   color: #ffffff;
   margin-bottom: 1rem; 
 }
+
+.dropdown-menu {
+  background-color: transparent; /* Transparent background */
+  width: 100%; /* Full width */
+  padding: 0.75rem; /* Padding inside the dropdown */
+  border: 2px solid #10b981; /* Green border */
+  border-radius: 0.5rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  outline: none; /* Remove default outline */
+  color: #ffffff; /* White text */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+  margin-bottom: 8px; /* Space below the dropdown */
+}
+
+.dropdown-menu:focus {
+  border-color: #047857; /* Darker green border on focus */
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); /* Green focus shadow */
+}
+
+.dropdown-menu.error {
+  background-color: #fecaca; /* Light red background for errors */
+  border-color: #f87171; /* Red border for errors */
+}
+
+.dropdown-menu option {
+  color: #000; /* Black text for dropdown options */
+}
+
+.dropdown-menu option:checked {
+  background-color: rgba(16, 185, 129, 0.5); /* Highlight selected option */
+  color: #ffffff; /* White text for the selected option */
+}

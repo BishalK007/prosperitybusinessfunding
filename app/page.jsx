@@ -219,22 +219,24 @@ export default function Home() {
                       [questions[current].id]: e.target.value,
                     })
                   }
-                  className="bg-transparent w-full p-3 border border-green-500 rounded-md mb-4"
+                  className={`dropdown-menu ${fieldError.startMonth ? "error" : ""}`}
                 >
-                  <option value="" disabled>Select one</option>
-                  <option value="Expansion">Expansion</option>
-                  <option value="Equipment purchase">Equipment purchase</option>
-                  <option value="Purchase a Vehicle">Purchase a Vehicle</option>
-                  <option value="Inventory">Inventory</option>
-                  <option value="Payroll">Payroll</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="Commercial Real Estate">Commercial Real Estate</option>
-                  <option value="Remodel my Location">Remodel my Location</option>
-                  <option value="Refinance Debt">Refinance Debt</option>
-                  <option value="Finance Accounts Receivable">Finance Accounts Receivable</option>
-                  <option value="Buy a Business/Franchise">Buy a Business/Franchise</option>
-                  <option value="Start a Business">Start a Business</option>
-                  <option value="Other">Other</option>
+                  <option value="" disabled>
+                    Select one
+                  </option>
+                  <option value="Expansion" >Expansion</option>
+                  <option value="Equipment purchase" >Equipment purchase</option>
+                  <option value="Purchase a Vehicle" >Purchase a Vehicle</option>
+                  <option value="Inventory" >Inventory</option>
+                  <option value="Payroll" >Payroll</option>
+                  <option value="Marketing" >Marketing</option>
+                  <option value="Commercial Real Estate" >Commercial Real Estate</option>
+                  <option value="Remodel my Location" >Remodel my Location</option>
+                  <option value="Refinance Debt" >Refinance Debt</option>
+                  <option value="Finance Accounts Receivable" >Finance Accounts Receivable</option>
+                  <option value="Buy a Business/Franchise" >Buy a Business/Franchise</option>
+                  <option value="Start a Business" >Start a Business</option>
+                  <option value="Other" >Other</option>
                 </select>
 
                 {fieldError && <div className="text-red-600 mb-2">{fieldError}</div>}
@@ -456,9 +458,22 @@ export default function Home() {
                   <input
                     type="text"
                     value={answers.businessZip || ''}
-                    onChange={(e) => setAnswers({ ...answers, businessZip: e.target.value })}
+                    maxLength={5}
+                    onChange={e => {
+                      const zip = e.target.value.replace(/\D/g, '').slice(0, 5);
+                      setAnswers({ ...answers, businessZip: zip });
+
+                      // Show error if not a valid US ZIP code and not empty
+                      if (zip.length === 5 && !/^\d{5}$/.test(zip)) {
+                        setFieldError({ ...fieldError, businessZip: "Please enter a valid 5-digit US ZIP code." });
+                      } else if (zip.length > 0 && zip.length < 5) {
+                        setFieldError({ ...fieldError, businessZip: "ZIP code must be 5 digits." });
+                      } else {
+                        setFieldError({ ...fieldError, businessZip: "" });
+                      }
+                    }}
                     className={`bg-transparent text-white font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-          ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
+      ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter 5-digit ZIP code"
                   />
                   {fieldError.businessZip && (
@@ -466,7 +481,6 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* Continue button */}
                 <button
                   onClick={() => {
                     const errors = {};
@@ -476,12 +490,10 @@ export default function Home() {
                     if (!answers.businessZip || !/^\d{5}$/.test(answers.businessZip)) {
                       errors.businessZip = "Please enter a valid 5-digit US ZIP code.";
                     }
-
                     if (Object.keys(errors).length > 0) {
                       setFieldError(errors);
                       return;
                     }
-
                     setFieldError({});
                     setShowTransition(true);
                     setTimeout(() => {
@@ -497,10 +509,11 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => {
+                    setFieldError(""); // Reset fieldError to avoid rendering issues
                     setShowTransition(true);
                     setTimeout(() => {
                       setShowTransition(false);
-                      setCurrent((c) => c - 1);
+                      setCurrent((c) => c - 1); // Navigate back to the previous question
                     }, 600);
                   }}
                   aria-label="Go back"
@@ -524,8 +537,7 @@ export default function Home() {
                   <select
                     value={answers.startMonth || ''}
                     onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
-                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-        ${fieldError.startMonth ? "bg-red-200" : "border-green-600"}`}
+                    className={`dropdown-menu ${fieldError.startMonth ? "error" : ""}`}
                   >
                     <option value="">Select month</option>
                     {[
@@ -545,8 +557,7 @@ export default function Home() {
                   <select
                     value={answers.startYear || ''}
                     onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
-                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-        ${fieldError.startYear ? "bg-red-200" : "border-green-600"}`}
+                    className={`dropdown-menu ${fieldError.startMonth ? "error" : ""}`}
                   >
                     <option value="">Select year</option>
                     {Array.from({ length: 30 }, (_, i) => {
@@ -613,8 +624,7 @@ export default function Home() {
                   <select
                     value={answers.industry || ''}
                     onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
-                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-        ${fieldError.industry ? "bg-red-200" : "border-green-600"}`}
+                    className={`dropdown-menu ${fieldError.startMonth ? "error" : ""}`}
                   >
                     <option value="">Select an industry</option>
                     <option>Accommodation and Food Services</option>
