@@ -468,41 +468,53 @@ export default function Home() {
             {/* Business Name and ZIP Code */}
             {current === 6 && (
               <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <h2 className="question-header">{questions[current]?.text || "Tell us about your business"}</h2>
+                <h2 className="questionHeading">{questions[current]?.text || "Tell us about your business"}</h2>
 
                 {/* Business Name Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Business Name</label>
+                  <label className="block mb-1 font-medium text-stone-800">Business Name</label>
                   <input
                     type="text"
                     value={answers.businessName || ''}
                     onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
-                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-          ${fieldError && typeof fieldError === "object" && fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
+                    className={`bg-transparent text-stone-800 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your business name"
                   />
-                  {fieldError && typeof fieldError === "object" && fieldError.businessName && (
+                  {fieldError.businessName && (
                     <div className="text-red-600 mt-1">{fieldError.businessName}</div>
                   )}
                 </div>
 
                 {/* Zip Code Field */}
                 <div className="mb-4 text-left">
-                  <label className="block mb-1 font-medium text-gray-700">Business ZIP Code</label>
+                  <label className="block mb-1 font-medium text-stone-900">Business ZIP Code</label>
                   <input
                     type="text"
                     value={answers.businessZip || ''}
-                    onChange={(e) => setAnswers({ ...answers, businessZip: e.target.value })}
-                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-          ${fieldError && typeof fieldError === "object" && fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
+                    maxLength={5}
+                    onChange={e => {
+                      const zip = e.target.value.replace(/\D/g, '').slice(0, 5);
+                      setAnswers({ ...answers, businessZip: zip });
+
+                      // Show error if not a valid US ZIP code and not empty
+                      if (zip.length === 5 && !/^\d{5}$/.test(zip)) {
+                        setFieldError({ ...fieldError, businessZip: "Please enter a valid 5-digit US ZIP code." });
+                      } else if (zip.length > 0 && zip.length < 5) {
+                        setFieldError({ ...fieldError, businessZip: "ZIP code must be 5 digits." });
+                      } else {
+                        setFieldError({ ...fieldError, businessZip: "" });
+                      }
+                    }}
+                    className={`bg-transparent text-stone-800 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+      ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter 5-digit ZIP code"
                   />
-                  {fieldError && typeof fieldError === "object" && fieldError.businessZip && (
+                  {fieldError.businessZip && (
                     <div className="text-red-600 mt-1">{fieldError.businessZip}</div>
                   )}
                 </div>
 
-                {/* Continue button */}
                 <button
                   onClick={() => {
                     const errors = {};
@@ -512,18 +524,16 @@ export default function Home() {
                     if (!answers.businessZip || !/^\d{5}$/.test(answers.businessZip)) {
                       errors.businessZip = "Please enter a valid 5-digit US ZIP code.";
                     }
-
                     if (Object.keys(errors).length > 0) {
                       setFieldError(errors);
                       return;
                     }
-
                     setFieldError({});
                     setShowTransition(true);
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 2000);
+                    }, 600);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -533,12 +543,12 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => {
-                    setFieldError({});
+                    setFieldError(""); // Reset fieldError to avoid rendering issues
                     setShowTransition(true);
                     setTimeout(() => {
                       setShowTransition(false);
-                      setCurrent((c) => c - 1);
-                    }, 2000);
+                      setCurrent((c) => c - 1); // Navigate back to the previous question
+                    }, 600);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
