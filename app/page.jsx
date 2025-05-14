@@ -6,6 +6,7 @@ import { questions } from "@/data/questions";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Building2, Handshake, Landmark, Store, User } from "lucide-react";
 import BackIcon from "@/components/icons/back-icon";
+import { DotBackground } from "@/components/DotBackground";
 
 
 const NAV_STEPS = [
@@ -55,7 +56,7 @@ export default function Home() {
       setTimeout(() => {
         setShowTransition(false);
         setCurrent(current + 1);
-      }, 600);
+      }, 2000);
     } else {
       console.log("Form submitted!", answers);
       setShowThankYou(true);
@@ -65,7 +66,12 @@ export default function Home() {
   const step = getStep(current);
 
   return (
-    <main className="flex flex-col bg-ignite-animated relative min-h-screen">
+    <main className="flex flex-col relative min-h-screen">
+      <DotBackground
+        className="fixed inset-0 w-full h-full z-0"
+        dotColor="#e0e7ef"
+      // You can adjust dotSize, spacing, and color as needed
+      />
       <nav className="w-full bg-gray-50 border-b border-gray-200 py-3 px-2 flex justify-center items-center gap-2 relative z-10">
         <div className="flex items-center gap-2 md:gap-4">
           <IgniteLogo />
@@ -77,11 +83,11 @@ export default function Home() {
 
       {!showThankYou && (
         <>
-          <div className="text-center text-sm text-gray-600 py-1 relative z-10">
+          <div className="text-center text-sm text-teal-900 py-1 relative z-10">
             Question {current + 1} of {totalQuestions}
           </div>
           <div className="w-full flex justify-center py-1 relative z-10">
-            <div className="w-1/3 bg-gray-100 h-1.5 dark:bg-gray-300 rounded-full overflow-hidden">
+            <div className="w-1/3 bg-gray-100 shadow-md shadow-gray-400/50 border-2 border-teal-200/50  h-2.5 dark:bg-gray-300 rounded-full overflow-hidden">
               <div
                 className="bg-green-600 h-1.5 transition-all duration-500 ease-out"
                 style={{ width: `${progressPercentage}%` }}
@@ -93,7 +99,7 @@ export default function Home() {
 
       <div className="flex-1 flex items-center justify-center px-2 py-4 relative z-10">
         {showThankYou ? (
-          <div className="bg-white rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
+          <div className="bg-transparent rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
             <DotLottieReact
               src="https://lottie.host/a0285ded-f43b-4af6-9edd-ec684f80071f/t5RejRJf3j.lottie"
               loop
@@ -108,11 +114,11 @@ export default function Home() {
         ) : showTransition ? (
           <div className="flex items-center justify-center">
             <DotLottieReact
-              src="https://lottie.host/b2288875-3cdf-4548-ae1d-cb2c069fc101/DxxhmKZQtP.lottie"
+              src="/assets/Animation Fill - 1747201202643.lottie"
               loop
               autoplay
               mute
-              playbackSpeed={1.5}
+              playbackSpeed={2}
               style={{ width: 200, height: 200 }}
             />
           </div>
@@ -121,7 +127,7 @@ export default function Home() {
             {current === 0 && (
               <section className="text-gray-700 body-font mb-8">
                 <div className="container px-5 py-6 mx-auto text-center">
-                  <h2 className="text-2xl font-bold text-green-800 mb-6">What type of business do you own?</h2>
+                  <h2 className="question-header">{questions[current]?.text || "What type of business do you own?"}</h2>
                   <div className="flex flex-wrap justify-center gap-4">
                     {["Sole Proprietor", "Partnership", "Limited Liability Company (LLC)", "C Corporation", "S Corporation"].map((type, index) => {
                       const Icon = [User, Handshake, Landmark, Building2, Store][index];
@@ -142,32 +148,62 @@ export default function Home() {
             )}
 
             {current === 1 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2 uppercase">How much money do you need?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "How much do you need?"}</h2>
 
                 <div className="text-4xl font-bold text-green-600 mb-4">
                   ${Number(answers[questions[current].id] || 640000).toLocaleString()}
                 </div>
-
-                <input
-                  type="range"
-                  min="10000"
-                  max="1000000"
-                  step="10000"
-                  value={answers[questions[current].id] || 640000}
-                  onChange={(e) =>
-                    setAnswers({
-                      ...answers,
-                      [questions[current].id]: parseInt(e.target.value),
-                    })
-                  }
-                  className="w-full h-1 appearance-none bg-gray-200 rounded-lg cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, #6cf5be ${((answers[questions[current].id] || 640000) - 10000) / (1000000 - 10000) * 100
-                      }%, #e5e7eb 0%)`,
-                  }}
-                />
+                <div className="relative w-full flex items-center justify-center" style={{ height: 56 }}>
+                  <input
+                    type="range"
+                    min="10000"
+                    max="1000000"
+                    step="10000"
+                    value={answers[questions[current].id] || 640000}
+                    onChange={(e) =>
+                      setAnswers({
+                        ...answers,
+                        [questions[current].id]: parseInt(e.target.value),
+                      })
+                    }
+                    className="w-full h-3 appearance-none rounded-lg cursor-pointer"
+                    style={{
+                      background: `linear-gradient(
+                        to right,
+                        #067a6e 0%, 
+                        #067a6e ${((answers[questions[current].id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
+                        #6cf5be ${((answers[questions[current].id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
+                        #6cf5be 100%
+                      )`,
+                    }}
+                    id="money-slider"
+                  />
+                  {/* Dollar sign overlay */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      left: `calc(${((answers[questions[current].id] || 640000) - 10000) / (1000000 - 10000) * 100}% - 14px)`,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      zIndex: 2,
+                      pointerEvents: "none",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: "1.5rem",
+                      width: 40,
+                      height: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "#00a79d",
+                      borderRadius: "50%",
+                      boxShadow: "0 0 2px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    $
+                  </span>
+                </div>
 
                 <div className="flex justify-between text-sm mt-2" style={{ color: "#33336a" }}>
                   <span>$10,000</span>
@@ -180,7 +216,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -194,7 +230,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -207,9 +243,8 @@ export default function Home() {
 
             {/* DROPDOWN QUESTION */}
             {current === 2 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What are you getting financing for?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "What are you getting finance for?"}</h2>
 
                 <select
                   value={answers[questions[current].id] || ""}
@@ -219,7 +254,7 @@ export default function Home() {
                       [questions[current].id]: e.target.value,
                     })
                   }
-                  className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                  className="bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
                 >
                   <option value="" disabled>Select one</option>
                   <option value="Expansion">Expansion</option>
@@ -250,7 +285,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -264,7 +299,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -277,23 +312,22 @@ export default function Home() {
 
             {/* Urgency */}
             {current === 3 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">How quickly do you need the money?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "How quickly do you need the money?"}</h2>
 
                 <div className="flex flex-col gap-3">
                   {["Within a week", "Within 2 weeks", "Within 1 month", "Unsure"].map((option) => (
                     <div
                       key={option}
                       className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
-            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-transparent"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
                         setTimeout(() => {
                           setShowTransition(false);
                           setCurrent((c) => c + 1); // Move to next question
-                        }, 600);
+                        }, 2000);
                       }}
                     >
                       <p className="text-lg font-medium text-green-800">{option}</p>
@@ -310,7 +344,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -323,9 +357,8 @@ export default function Home() {
 
             {/* What's your average monthly revenue? */}
             {current === 4 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What's your average monthly revenue?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "What's your average monthly revenue?"}</h2>
 
                 {/* ShadCN Input Field */}
                 <div className="mb-4">
@@ -341,7 +374,7 @@ export default function Home() {
                         setFieldError("Please enter a value less than $10 million.");
                       }
                     }}
-                    className={`w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
           ${fieldError ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter amount"
                   />
@@ -361,7 +394,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1); // Move to next question
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -375,7 +408,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -388,23 +421,22 @@ export default function Home() {
 
             {/* Credit Score */}
             {current === 5 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What's your credit score?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current].text}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "What is your personal credit score?"}</h2>
 
                 <div className="flex flex-col gap-3">
                   {["Excellent (720+)", "Good (680 - 719)", "Fair (640 - 679)", "Poor (639 or less)"].map((option) => (
                     <div
                       key={option}
                       className={`cursor-pointer border-2 border-green-600 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-green-100
-            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-white"}`}
+            ${answers[questions[current].id] === option ? "bg-green-100" : "bg-transparent"}`}
                       onClick={() => {
                         setAnswers({ ...answers, [questions[current].id]: option });
                         setShowTransition(true);
                         setTimeout(() => {
                           setShowTransition(false);
                           setCurrent((c) => c + 1); // Move to next question
-                        }, 600);
+                        }, 2000);
                       }}
                     >
                       <p className="text-lg font-medium text-green-800">{option}</p>
@@ -421,7 +453,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -435,11 +467,8 @@ export default function Home() {
 
             {/* Business Name and ZIP Code */}
             {current === 6 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Tell us about your business</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                  {questions[current]?.text || ''}
-                </h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "Tell us about your business"}</h2>
 
                 {/* Business Name Field */}
                 <div className="mb-4 text-left">
@@ -448,11 +477,11 @@ export default function Home() {
                     type="text"
                     value={answers.businessName || ''}
                     onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-          ${fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError && typeof fieldError === "object" && fieldError.businessName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your business name"
                   />
-                  {fieldError.businessName && (
+                  {fieldError && typeof fieldError === "object" && fieldError.businessName && (
                     <div className="text-red-600 mt-1">{fieldError.businessName}</div>
                   )}
                 </div>
@@ -464,11 +493,11 @@ export default function Home() {
                     type="text"
                     value={answers.businessZip || ''}
                     onChange={(e) => setAnswers({ ...answers, businessZip: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-          ${fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+          ${fieldError && typeof fieldError === "object" && fieldError.businessZip ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter 5-digit ZIP code"
                   />
-                  {fieldError.businessZip && (
+                  {fieldError && typeof fieldError === "object" && fieldError.businessZip && (
                     <div className="text-red-600 mt-1">{fieldError.businessZip}</div>
                   )}
                 </div>
@@ -494,7 +523,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -504,11 +533,12 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => {
+                    setFieldError({});
                     setShowTransition(true);
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -522,9 +552,8 @@ export default function Home() {
 
             {/* Business Start Date */}
             {current === 7 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                {/* <p className="text-lg text-blue-900 font-semibold mb-2">When did you start your business?</p> */}
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "When did you start your business?"}</h2>
 
                 {/* Month and Year Dropdowns */}
                 <div className="mb-4 text-left">
@@ -532,7 +561,7 @@ export default function Home() {
                   <select
                     value={answers.startMonth || ''}
                     onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.startMonth ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select month</option>
@@ -553,7 +582,7 @@ export default function Home() {
                   <select
                     value={answers.startYear || ''}
                     onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.startYear ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select year</option>
@@ -584,7 +613,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -599,7 +628,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -612,9 +641,8 @@ export default function Home() {
 
             {/* Industry Dropdown */}
             {current === 8 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">What industry are you in?</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "What industry are you in?"}</h2>
 
                 {/* Industry Dropdown */}
                 <div className="mb-4 text-left">
@@ -622,7 +650,7 @@ export default function Home() {
                   <select
                     value={answers.industry || ''}
                     onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.industry ? "bg-red-200" : "border-green-600"}`}
                   >
                     <option value="">Select an industry</option>
@@ -667,7 +695,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -682,7 +710,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -696,9 +724,8 @@ export default function Home() {
 
             {/* Personal Info */}
             {current === 9 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Tell us about yourself</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || ""}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "Tell us about yourself"}</h2>
 
                 {/* First Name Field */}
                 <div className="mb-4 text-left">
@@ -707,7 +734,7 @@ export default function Home() {
                     type="text"
                     value={answers.firstName || ''}
                     onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.firstName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your first name"
                   />
@@ -723,7 +750,7 @@ export default function Home() {
                     type="text"
                     value={answers.lastName || ''}
                     onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.lastName ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your last name"
                   />
@@ -764,7 +791,7 @@ export default function Home() {
                       setAnswers({ ...answers, phoneNumber: formatted });
                     }}
                     placeholder="(814) 222-2222"
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
         ${fieldError.phoneNumber ? "bg-red-200" : "border-green-600"}`}
                   />
                   {fieldError.phoneNumber && (
@@ -800,7 +827,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c + 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -815,7 +842,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -828,9 +855,8 @@ export default function Home() {
 
             {/* Contact Details */}
             {current === 10 && (
-              <div className="p-6 bg-white rounded-xl shadow-md text-center max-w-xl mx-auto">
-                <p className="text-lg text-blue-900 font-semibold mb-2">Your Contact Details</p>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{questions[current]?.text || "What is your email address?"}</h2>
+              <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+                <h2 className="question-header">{questions[current]?.text || "What is your email address?"}</h2>
 
                 {/* Email Address Field */}
                 <div className="mb-4 text-left">
@@ -839,8 +865,8 @@ export default function Home() {
                     type="email"
                     value={answers.email || ''}
                     onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
-                    className={`w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-        ${fieldError.email ? "bg-red-200" : "border-green-600"}`}
+                    className={`bg-transparent w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                      ${fieldError.email ? "bg-red-200" : "border-green-600"}`}
                     placeholder="Enter your email"
                   />
                   {fieldError.email && (
@@ -868,7 +894,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setShowThankYou(true);
-                    }, 600);
+                    }, 2000);
                   }}
                   className="btn-glosmophobic"
                 >
@@ -883,7 +909,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }}
                   aria-label="Go back"
                   className="btn-back group"
@@ -911,7 +937,7 @@ export default function Home() {
                     setTimeout(() => {
                       setShowTransition(false);
                       setCurrent((c) => c - 1);
-                    }, 600);
+                    }, 2000);
                   }
                 }}
                 showBackButton={current > 0}
@@ -921,7 +947,7 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="w-full bg-gray-50 border-t border-gray-200 mt-auto relative z-10">
+      <footer className="w-full bg-transparent mt-auto relative z-10">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
           <div className="flex flex-col items-center mb-4">
             <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-900 to-blue-400 text-white font-extrabold text-4xl select-none mb-2">
