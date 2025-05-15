@@ -134,7 +134,7 @@ export default function QuestionForm({
               $
             </span>
           </div>
-          <div className="flex justify-between text-sm mt-2" style={{ color: "#33336a" }}>
+          <div className="flex justify-between text-sm mt-2" style={{ color: "#2186a0" }}>
             <span>$10,000</span>
             <span>$1,000,000+</span>
           </div>
