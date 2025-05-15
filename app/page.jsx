@@ -32,7 +32,7 @@ export default function Home() {
         dotColor="#e0e7ef"
       />
       <nav className="w-full bg-slate-800 border-b border-gray-200 py-6 px-2 flex flex-col items-center gap-0 relative z-10">
-        <div className="flex items-center gap-0">
+        <div className="flex items-center gap-[2px]">
           <Logo />
           <div className="flex flex-col items-start">
             <span className="text-2xl sm:text-3xl font-extrabold colorChange1 tracking-tight leading-none">
@@ -113,7 +113,7 @@ export default function Home() {
 
       <footer className="w-full bg-transparent mt-auto pt-8 pb-4 px-2 z-10">
         <div className="max-w-2xl mx-auto border-t border-gray-200 px-4 py-8 flex flex-col items-center">
-          <div className="flex items-center gap-0">
+          <div className="flex items-center gap-[2px]">
             <Logo />
             <div className="flex flex-col items-start">
               <span className="text-2xl sm:text-3xl font-extrabold colorChange1 tracking-tight leading-none">
