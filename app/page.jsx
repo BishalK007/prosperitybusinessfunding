@@ -30,12 +30,17 @@ export default function Home() {
         className="fixed inset-0 w-full h-full z-0"
         dotColor="#e0e7ef"
       />
-      <nav className="w-full bg-zinc-900/20 border-b border-gray-200 py-3 px-2 flex justify-center items-center gap-2 relative z-10">
-        <div className="flex items-center gap-2 md:gap-4">
+      <nav className="w-full bg-slate-800/20 border-b border-gray-200 py-6 px-2 flex flex-col items-center gap-0 relative z-10">
+        <div className="flex items-center gap-3">
           <ProsperityLogo />
-          <span className="ml-2 text-xl font-bold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent hidden sm:inline">
-            ProsperityBusinessFinance
-          </span>
+          <div className="flex flex-col items-start">
+            <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-blocktracking-tight leading-none">
+              ROSPERITY
+            </span>
+            <span className="text-base sm:text-lg font-semibold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-block">
+              BUSINESS FINANCE
+            </span>
+          </div>
         </div>
       </nav>
 
