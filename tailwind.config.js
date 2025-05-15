@@ -49,8 +49,30 @@ module.exports = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
+			Orange: {
+				100: "#fffaf4",
+				"100/50": "#fffaf480",
+			},
+			Teal: {
+				50: "#f2fcf8",
+				100: "#eafff2",
+				200: "#d0ffe7",
+				300: "#b6ffd8",
+				400: "#5bcdc0",
+				500: "#0ab5a3",
+				600: "#08a59d",
+				700: "#067a6e",
+			},
+			Cyan: {
+				300: "#53eafd",
+				600: "#2186a0",
+			},
+			Gray: {
+				300: "#e3eafc",
+			},
 			primaryGreen: "#00a79d",
 			lightGreen: "#80d3d6",
+
   		},
   		fontFamily: {
   			lora: [

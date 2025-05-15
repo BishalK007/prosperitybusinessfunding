@@ -126,7 +126,7 @@ input[type='range']::-ms-fill-upper {
     font-family: var(--font-barlow, sans-serif); /* Default font or fallback */
     width: 50%; /* 50% width */
     padding: 0.75rem 1.5rem; /* Equivalent to py-3 px-6 */
-    background-color: rgba(0, 167, 157, 0.1); /* Transparent light green background */
+    background-color: #fffaf4; /* Transparent light green background */
     border: 1px solid rgba(0, 167, 157, 0.5); /* Border with light green */
     border-radius: 0.5rem; /* Rounded corners */
     font-size: 1rem; /* Base font size */
@@ -149,6 +149,7 @@ input[type='range']::-ms-fill-upper {
   }
 }
 
+
 /* Back Button */
 .btn-back {
   display: flex;
@@ -159,8 +160,8 @@ input[type='range']::-ms-fill-upper {
   font-size: 1rem; /* Base font size */
   font-weight: 600; /* Font-semibold */
   color: #00a79d; /* Primary green for text */
-  background-color: transparent; /* Transparent background */
-  border: 2px solid #00a79d; /* Primary green border */
+  background-color: #fffaf4; /* Transparent background */
+  border: 1px solid #00a79c7b; /* Primary green border */
   border-radius: 0.5rem; /* Rounded corners */
   cursor: pointer; /* Pointer cursor */
   transition: all 0.3s ease; /* Smooth transition for hover effects */
@@ -175,4 +176,20 @@ input[type='range']::-ms-fill-upper {
 .btn-back:focus {
   outline: none; /* Remove default outline */
   box-shadow: 0 0 8px rgba(0, 167, 157, 0.5); /* Focus ring */
+}
+
+/* @layer components {
+  .question-header {
+    @apply text-2xl font-semibold mb-4 bg-gradient-to-br from-green-800 to-green-300 bg-clip-text text-transparent;
+  }
+} */
+
+.question-header{
+  background: linear-gradient(to right, #2186a0, #08a59d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  padding-bottom: 2px;
 }

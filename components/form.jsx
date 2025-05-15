@@ -1,384 +1,694 @@
 "use client";
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import BackIcon from "./icons/back-icon";
+import React from "react";
+import { Building2, Handshake, Landmark, Store, User } from "lucide-react";
 
-const spring = {
-  type: "spring",
-  stiffness: 400,
-  damping: 32,
-  mass: 1.2,
-};
-
-function isValidUSZip(zip) {
-  return /^\d{5}$/.test(zip);
-}
-
-function isValidUSPhone(phone) {
-  // Accepts (212) 555-1234 or 212-555-1234 or 2125551234
-  return /^(\(\d{3}\)\s?|\d{3}-?)\d{3}-?\d{4}$/.test(phone);
-}
-
-async function fetchZipLocation(zip) {
-  try {
-    const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    const place = data.places?.[0];
-    if (place) {
-      return `${place["place name"]}, ${place["state abbreviation"]}`;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-export default function QuestionCard({
-  question,
-  selected,
-  onSelect,
+export default function QuestionForm({
+  current,
+  questions,
+  answers,
+  setAnswers,
   fieldError,
   setFieldError,
-  onBack,
+  setShowTransition,
+  setCurrent,
+  setShowThankYou,
 }) {
-  // For ZipCode field
-  const [zipInput, setZipInput] = useState("");
-  const [zipLocation, setZipLocation] = useState("");
-  const [zipError, setZipError] = useState("");
-  // For phone number
-  const [phoneInput, setPhoneInput] = useState("");
+  const question = questions[current];
 
-  // Handle zip code input change and lookup
-  const handleZipChange = async (e) => {
-    const val = e.target.value.replace(/\D/g, "").slice(0, 5);
-    setZipInput(val);
-    setZipLocation("");
-    setZipError("");
-    if (val.length === 5 && isValidUSZip(val)) {
-      setZipLocation("Looking up location...");
-      const loc = await fetchZipLocation(val);
-      if (loc) {
-        setZipLocation(loc);
-      } else {
-        setZipLocation("");
-        setZipError("Zip code not found");
-      }
-    } else if (val.length === 5) {
-      setZipLocation("");
-      setZipError("Invalid US zip code");
+  // Helper for error rendering
+  const getError = (key) =>
+    fieldError && typeof fieldError === "object" && fieldError[key]
+      ? fieldError[key]
+      : "";
+
+  // Continue handler for most questions
+  const handleContinue = (validate, after) => {
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFieldError(errors);
+      return;
     }
+    setFieldError({});
+    setShowTransition(true);
+    setTimeout(() => {
+      setShowTransition(false);
+      after();
+    }, 2000);
   };
 
-  // Phone number formatting
-  const formatPhone = (val) => {
-    const digits = val.replace(/\D/g, "").slice(0, 10);
-    if (digits.length < 4) return digits;
-    if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  // Back handler
+  const handleBack = () => {
+    setFieldError({});
+    setShowTransition(true);
+    setTimeout(() => {
+      setShowTransition(false);
+      setCurrent((c) => c - 1);
+    }, 2000);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-10">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={question.id}
-          initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -24, scale: 0.98 }}
-          transition={{ ...spring, duration: 0.35 }}
-          className="bg-white rounded-xl shadow-lg p-6 sm:p-10 w-full max-w-lg"
-        >
-
-          <h2 className="font-lora text-2xl sm:text-3xl md:text-4xl font-bold text-center text-blue-900 mb-6 sm:mb-8">
-            {question.title}
-          </h2>
-          {question.p && (
-            <p
-              className="text-center text-gray-500 mb-4 sm:mb-6"
-            >
-              {question.p}
-            </p>
-          )}
-          {/* Render options if present */}
-          {Array.isArray(question.options) && (
-            <div
-              className={
-                question.id === "needFunding"
-                  ? "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
-                  : "space-y-3 sm:space-y-4"
-              }
-            >
-              {question.id === "needFunding"
-                ? question.options.map((option, idx) => {
-                    const isLast =
-                      idx === question.options.length - 1 &&
-                      question.options.length % 2 === 1;
-                    return (
-                      <motion.button
-                        key={option}
-                        whileHover={{ scale: 1.015 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        onClick={() => onSelect(option)}
-                        className={`w-full py-3 sm:py-4 px-4 sm:px-6 border rounded-lg text-base sm:text-lg transition-all
-                          ${
-                            selected === option
-                              ? "border-blue-900 bg-blue-50 text-blue-900 font-semibold"
-                              : "border-gray-300 text-gray-700 hover:border-blue-500 hover:bg-blue-200 "
-                          }
-                          ${isLast ? "sm:col-span-2" : ""}
-                        `}
-                      >
-                        {option}
-                      </motion.button>
-                    );
-                  })
-                : question.options.map((option) => (
-                    <motion.button
-                      key={option}
-                      whileHover={{ scale: 1.015 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      onClick={() => onSelect(option)}
-                      className={`w-full py-3 sm:py-4 px-4 sm:px-6 border rounded-lg text-base sm:text-lg transition-all
-                        ${
-                          selected === option
-                            ? "border-blue-900 bg-blue-50 text-blue-900 font-semibold"
-                            : "border-gray-300 text-gray-700 hover:border-blue-500 hover:bg-blue-200 "
-                        }`}
-                    >
-                      {option}
-                    </motion.button>
-                  ))}
+  switch (current) {
+    case 0:
+      return (
+        <section className="text-gray-700 body-font mb-8">
+          <div className="container px-5 py-6 mx-auto text-center">
+            <h2 className="question-header">{question?.text || "What type of business do you own?"}</h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["Sole Proprietor", "Partnership", "Limited Liability Company (LLC)", "C Corporation", "S Corporation"].map((type, index) => {
+                const icons = [User, Handshake, Landmark, Building2, Store];
+                const Icon = icons[index];
+                return (
+                  <div
+                    key={index}
+                    className="cursor-pointer bg-Orange-100 border-2 border-gray-300 w-64 px-6 py-4 rounded-xl text-center shadow-md transform transition duration-300 hover:scale-105 hover:bg-Teal-50 hover:border-2 hover:border-Teal-400  flex flex-col items-center gap-3"
+                    onClick={() => {
+                      setAnswers({ ...answers, [question.id]: type });
+                      setShowTransition(true);
+                      setTimeout(() => {
+                        setShowTransition(false);
+                        setCurrent((c) => c + 1);
+                      }, 2000);
+                    }}
+                  >
+                    {Icon && <Icon className="text-Teal-500" size={32} />}
+                    <p className="text-lg font-medium text-Teal-600">{type}</p>
+                  </div>
+                );
+              })}
             </div>
-          )}
-          {/* Render input if inputType is present */}
-          {question.inputType === "fullName" ? (
-            <form
-              className="mt-5 flex flex-col items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const first = e.target.elements.firstName.value.trim();
-                const last = e.target.elements.lastName.value.trim();
-                if (!first || !last) {
-                  setFieldError("First and last name are required.");
-                  return;
-                }
-                setFieldError("");
-                onSelect({ firstName: first, lastName: last });
+          </div>
+        </section>
+      );
+    case 1:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "How much do you need?"}</h2>
+          <div className="text-4xl font-bold text-Cyan-600 mb-4">
+            ${Number(answers[question.id] || 640000).toLocaleString()}
+          </div>
+          <div className="relative w-full flex items-center justify-center" style={{ height: 56 }}>
+            <input
+              type="range"
+              min="10000"
+              max="1000000"
+              step="10000"
+              value={answers[question.id] || 640000}
+              onChange={(e) =>
+                setAnswers({
+                  ...answers,
+                  [question.id]: parseInt(e.target.value),
+                })
+              }
+              className="w-full h-3 appearance-none rounded-lg cursor-pointer"
+              style={{
+                background: `linear-gradient(
+                  to right,
+                  #067a6e 0%, 
+                  #067a6e ${((answers[question.id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
+                  #5bcdc0 ${((answers[question.id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
+                  #5bcdc0 100%
+                )`,
+              }}
+              id="money-slider"
+            />
+            <span
+              style={{
+                position: "absolute",
+                left: `calc(${((answers[question.id] || 640000) - 10000) / (1000000 - 10000) * 100}% - 14px)`,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 2,
+                pointerEvents: "none",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                width: 40,
+                height: 40,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#00a79d",
+                borderRadius: "50%",
+                boxShadow: "0 0 2px rgba(0,0,0,0.1)",
               }}
             >
-              <div className="flex flex-col gap-3 sm:gap-4 w-full mb-2">
-                <input
-                  name="firstName"
-                  type="text"
-                  placeholder="First Name"
-                  autoComplete="given-name"
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                  required
-                />
-                <input
-                  name="lastName"
-                  type="text"
-                  placeholder="Last Name"
-                  autoComplete="family-name"
-                  className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                  required
-                />
-              </div>
-              {fieldError && (
-                <div className="w-full text-left text-red-500 text-sm mb-2">
-                  {fieldError}
-                </div>
-              )}
-              <button
-                type="submit"
-                className="w-full py-3 px-6 bg-blue-900 text-white rounded-lg font-semibold text-base sm:text-lg hover:bg-blue-800 transition-all"
-              >
-                Next
-              </button>
-            </form>
-          ) : question.id === "ZipCode" ? (
-            <form
-              className="mt-5 flex flex-col items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!isValidUSZip(zipInput) || !zipLocation) {
-                  setFieldError("Please enter a valid US zip code.");
-                  return;
-                }
-                setFieldError("");
-                onSelect(zipInput);
-              }}
-            >
-              <input
-                name="input"
-                type="text"
-                inputMode="numeric"
-                pattern="\d{5}"
-                placeholder={question.placeholder || ""}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg mb-2 focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                required
-                value={zipInput}
-                onChange={handleZipChange}
-                maxLength={5}
-              />
-              <div className="w-full min-h-[1.5em] text-sm text-left px-1">
-                {zipInput.length === 5 &&
-                  (zipLocation ? (
-                    <span className="text-blue-900">{zipLocation}</span>
-                  ) : zipError ? (
-                    <span className="text-red-500">{zipError}</span>
-                  ) : null)}
-              </div>
-              {fieldError && (
-                <div className="w-full text-left text-red-500 text-sm mb-2">
-                  {fieldError}
-                </div>
-              )}
-              {question.nextButton && (
-                <button
-                  type="submit"
-                  className="w-full py-3 px-6 bg-blue-900 text-white rounded-lg font-semibold text-base sm:text-lg hover:bg-blue-800 transition-all mt-2"
-                  disabled={!isValidUSZip(zipInput) || !zipLocation}
-                >
-                  Next
-                </button>
-              )}
-            </form>
-          ) : question.id === "phoneNumber" ? (
-            <form
-              className="mt-5 flex flex-col items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const val = e.target.elements.input.value;
-                if (!isValidUSPhone(val)) {
-                  setFieldError(
-                    "Please enter a valid US phone number. Format: (212) 555-1234"
-                  );
-                  return;
-                }
-                setFieldError("");
-                onSelect(val);
-              }}
-            >
-              <input
-                name="input"
-                type="tel"
-                placeholder="(212) 555-1234"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg mb-2 focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                required
-                value={phoneInput}
-                onChange={(e) => setPhoneInput(formatPhone(e.target.value))}
-                maxLength={14}
-              />
-              {fieldError && (
-                <div className="w-full text-left text-red-500 text-sm mb-2">
-                  {fieldError}
-                </div>
-              )}
-              {question.nextButton && (
-                <button
-                  type="submit"
-                  className="w-full py-3 px-6 bg-blue-900 text-white rounded-lg font-semibold text-base sm:text-lg hover:bg-blue-800 transition-all"
-                >
-                  Next
-                </button>
-              )}
-            </form>
-          ) : question.id === "annualRevenue" ? (
-            <form
-              className="mt-5 flex flex-col items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const val = e.target.elements.input.value.replace(/,/g, "");
-                if (!val || isNaN(val) || Number(val) <= 0) {
-                  setFieldError("Please enter a valid annual revenue.");
-                  return;
-                }
-                setFieldError("");
-                onSelect(val);
-              }}
-            >
-              <div className="relative w-full mb-2">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-900 text-lg font-bold pointer-events-none">
-                  $
-                </span>
-                <input
-                  name="input"
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="500,000"
-                  className="pl-8 border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg w-full focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                  required
-                  min={1}
-                  step="any"
-                />
-              </div>
-              {fieldError && (
-                <div className="w-full text-left text-red-500 text-sm mb-2">
-                  {fieldError}
-                </div>
-              )}
-              {question.nextButton && (
-                <button
-                  type="submit"
-                  className="w-full py-3 px-6 bg-blue-900 text-white rounded-lg font-semibold text-base sm:text-lg hover:bg-blue-800 transition-all"
-                >
-                  Next
-                </button>
-              )}
-            </form>
-          ) : question.inputType ? (
-            <form
-              className="mt-5 flex flex-col items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const value = e.target.elements.input.value;
-                if (!value) {
-                  setFieldError("This field is required.");
-                  return;
-                }
-                setFieldError("");
-                onSelect(value);
-              }}
-            >
-              <input
-                name="input"
-                type={question.inputType}
-                placeholder={question.placeholder || ""}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-base sm:text-lg mb-2 focus:outline-none focus:border-blue-900 text-blue-900 placeholder-gray-400 transition-shadow focus:shadow-md"
-                required
-              />
-              {fieldError && (
-                <div className="w-full text-left text-red-500 text-sm mb-2">
-                  {fieldError}
-                </div>
-              )}
-              
-              {question.nextButton && (
-                <button
-                  type="submit"
-                  className="w-full py-3 px-6 bg-blue-900 text-white rounded-lg font-semibold text-base sm:text-lg hover:bg-blue-800 transition-all"
-                >
-                  Next
-                </button>
-              )}
-            </form>
-          ) : null}
-          {/* Bottom Back Button */}
+              $
+            </span>
+          </div>
+          <div className="flex justify-between text-sm mt-2" style={{ color: "#33336a" }}>
+            <span>$10,000</span>
+            <span>$1,000,000+</span>
+          </div>
+          <button
+            onClick={() => handleContinue(() => ({}), () => setCurrent((c) => c + 1))}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
           <button
             type="button"
-            onClick={onBack}
+            onClick={handleBack}
             aria-label="Go back"
-            className="pt-10 flex flex-row w-full justify-center"
+            className="btn-back group"
           >
-          <BackIcon/>
+            <span>Back</span>
           </button>
-          
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
+        </div>
+      );
+    case 2:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "What are you getting finance for?"}</h2>
+          <select
+            value={answers[question.id] || ""}
+            onChange={(e) =>
+              setAnswers({
+                ...answers,
+                [question.id]: e.target.value,
+              })
+            }
+            className="bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+          >
+            <option value="" disabled>Select one</option>
+            {(question.options || []).map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+          {getError(question.id) && (
+            <div className="text-red-600 mb-2">{getError(question.id)}</div>
+          )}
+          <button
+            onClick={() => {
+              if (!answers[question.id]) {
+                setFieldError({ [question.id]: "Please select an industry." });
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setCurrent((c) => c + 1);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 3:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "How quickly do you need the money?"}</h2>
+          <div className="flex flex-col gap-3">
+            {(question.options || []).map((option) => (
+              <div
+                key={option}
+                className={`cursor-pointer border-2 border-gray-300 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-Teal-50 hover:border-2 hover:border-Teal-400
+                  ${answers[question.id] === option ? "bg-Teal-50" : "bg-Orange-100"}`}
+                onClick={() => {
+                  setAnswers({ ...answers, [question.id]: option });
+                  setShowTransition(true);
+                  setTimeout(() => {
+                    setShowTransition(false);
+                    setCurrent((c) => c + 1);
+                  }, 2000);
+                }}
+              >
+                <p className="text-lg font-medium text-Teal-700">{option}</p>
+              </div>
+            ))}
+          </div>
+          {getError(question.id) && (
+            <div className="text-red-600 mt-3">{getError(question.id)}</div>
+          )}
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 4:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "What's your average monthly revenue?"}</h2>
+          <div className="mb-4">
+            <input
+              type="text"
+              value={answers[question.id] ? `$${answers[question.id]}` : ""}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, "");
+                if (value === "" || parseInt(value) < 10000000) {
+                  setAnswers({ ...answers, [question.id]: value });
+                  setFieldError({});
+                } else {
+                  setFieldError({ [question.id]: "Please enter a value less than $10 million." });
+                }
+              }}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                ${getError(question.id) ? "bg-red-200" : "border-Teal-700"}`}
+              placeholder="Enter amount"
+            />
+          </div>
+          {getError(question.id) && (
+            <div className="text-red-600 mt-3">{getError(question.id)}</div>
+          )}
+          <button
+            onClick={() => {
+              if (!answers[question.id] || parseInt(answers[question.id]) >= 10000000) {
+                setFieldError({ [question.id]: "Please enter a value less than $10 million." });
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setCurrent((c) => c + 1);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 5:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "What is your personal credit score?"}</h2>
+          <div className="flex flex-col gap-3">
+            {(question.options || []).map((option) => (
+              <div
+                key={option}
+                className={`cursor-pointer border-2 border-gray-300 px-6 py-4 rounded-xl text-center shadow-sm transform transition-transform duration-300 hover:scale-105 hover:bg-Teal-50 hover:border-2 hover:border-Teal-400
+                  ${answers[question.id] === option ? "bg-Teal-50" : "bg-Orange-100"}`}
+                onClick={() => {
+                  setAnswers({ ...answers, [question.id]: option });
+                  setShowTransition(true);
+                  setTimeout(() => {
+                    setShowTransition(false);
+                    setCurrent((c) => c + 1);
+                  }, 2000);
+                }}
+              >
+                <p className="text-lg font-medium text-Teal-700">{option}</p>
+              </div>
+            ))}
+          </div>
+          {getError(question.id) && (
+            <div className="text-red-600 mt-3">{getError(question.id)}</div>
+          )}
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 6:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "Tell us about your business"}</h2>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Business Name</label>
+            <input
+              type="text"
+              value={answers.businessName || ""}
+              onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                ${getError("businessName") ? "bg-red-200" : "border-Teal-400"}`}
+              placeholder="Enter your business name"
+            />
+            {getError("businessName") && (
+              <div className="text-red-600 mt-1">{getError("businessName")}</div>
+            )}
+          </div>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Business ZIP Code</label>
+            <input
+              type="text"
+              value={answers.businessZip || ""}
+              maxLength={5}
+              onChange={(e) => {
+                const zip = e.target.value.replace(/\D/g, "").slice(0, 5);
+                setAnswers({ ...answers, businessZip: zip });
+                if (zip.length === 5 && !/^\d{5}$/.test(zip)) {
+                  setFieldError({
+                    ...fieldError,
+                    businessZip: "Please enter a valid 5-digit US ZIP code.",
+                  });
+                } else if (zip.length > 0 && zip.length < 5) {
+                  setFieldError({
+                    ...fieldError,
+                    businessZip: "ZIP code must be 5 digits.",
+                  });
+                } else {
+                  setFieldError({ ...fieldError, businessZip: "" });
+                }
+              }}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                ${getError("businessZip") ? "bg-red-200" : "border-green-600"}`}
+              placeholder="Enter 5-digit ZIP code"
+            />
+            {getError("businessZip") && (
+              <div className="text-red-600 mt-1">{getError("businessZip")}</div>
+            )}
+          </div>
+          <button
+            onClick={() =>
+              handleContinue(() => {
+                const errors = {};
+                if (!answers.businessName || answers.businessName.trim() === "")
+                  errors.businessName = "Please enter your business name.";
+                if (!answers.businessZip || !/^\d{5}$/.test(answers.businessZip))
+                  errors.businessZip = "Please enter a valid 5-digit US ZIP code.";
+                return errors;
+              }, () => setCurrent((c) => c + 1))
+            }
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 7:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "When did you start your business?"}</h2>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Start Month</label>
+            <select
+              value={answers.startMonth || ''}
+              onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                ${getError("startMonth") ? "bg-red-200" : "border-green-600"}`}
+            >
+              <option value="">Select month</option>
+              {[
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+              ].map((month, index) => (
+                <option key={index} value={index + 1}>{month}</option>
+              ))}
+            </select>
+            {getError("startMonth") && (
+              <div className="text-red-600 mt-1">{getError("startMonth")}</div>
+            )}
+          </div>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Start Year</label>
+            <select
+              value={answers.startYear || ''}
+              onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+                ${getError("startYear") ? "bg-red-200" : "border-Teal-400"}`}
+            >
+              <option value="">Select year</option>
+              {Array.from({ length: 30 }, (_, i) => {
+                const year = new Date().getFullYear() - i;
+                return <option key={year} value={year}>{year}</option>;
+              })}
+            </select>
+            {getError("startYear") && (
+              <div className="text-red-600 mt-1">{getError("startYear")}</div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              const errors = {};
+              if (!answers.startMonth) errors.startMonth = "Please select a month.";
+              if (!answers.startYear) errors.startYear = "Please select a year.";
+              if (Object.keys(errors).length > 0) {
+                setFieldError(errors);
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setCurrent((c) => c + 1);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 8:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "What industry are you in?"}</h2>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Industry</label>
+            <select
+              value={answers.industry || ''}
+              onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+                ${getError("industry") ? "bg-red-200" : "border-Teal-400"}`}
+            >
+              <option value="">Select an industry</option>
+              <option>Accommodation and Food Services</option>
+              <option>Administrative & Support and Waste Management & Remediation Services</option>
+              <option>Agriculture, Forestry, Fishing and Hunting</option>
+              <option>Arts, Entertainment, and Recreation</option>
+              <option>Construction</option>
+              <option>Educational Services</option>
+              <option>Finance and Insurance</option>
+              <option>Health Care and Social Assistance</option>
+              <option>Information</option>
+              <option>Management of Companies and Enterprises</option>
+              <option>Manufacturing</option>
+              <option>Other Services (except Public Administration)</option>
+              <option>Professional, Scientific and Technical Services</option>
+              <option>Public Administration</option>
+              <option>Real Estate Rental and Leasing</option>
+              <option>Retail Trade</option>
+              <option>Transportation and warehousing</option>
+              <option>Utilities</option>
+              <option>Wholesale Trade</option>
+            </select>
+            {getError("industry") && (
+              <div className="text-red-600 mt-1">{getError("industry")}</div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              const errors = {};
+              if (!answers.industry) errors.industry = "Please select an industry.";
+              if (Object.keys(errors).length > 0) {
+                setFieldError(errors);
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setCurrent((c) => c + 1);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 9:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "Tell us about yourself"}</h2>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">First Name</label>
+            <input
+              type="text"
+              value={answers.firstName || ''}
+              onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+                ${getError("firstName") ? "bg-red-200" : "border-Teal-400"}`}
+              placeholder="Enter your first name"
+            />
+            {getError("firstName") && (
+              <div className="text-red-600 mt-1">{getError("firstName")}</div>
+            )}
+          </div>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Last Name</label>
+            <input
+              type="text"
+              value={answers.lastName || ''}
+              onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+                ${getError("lastName") ? "bg-red-200" : "border-Teal-400"}`}
+              placeholder="Enter your last name"
+            />
+            {getError("lastName") && (
+              <div className="text-red-600 mt-1">{getError("lastName")}</div>
+            )}
+          </div>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Phone Number</label>
+            <input
+              type="text"
+              value={answers.phoneNumber || ''}
+              onChange={(e) => {
+                let digits = e.target.value.replace(/\D/g, '');
+                if (digits.length === 11 && digits.startsWith('1')) {
+                  digits = digits.slice(1);
+                }
+                digits = digits.slice(0, 10);
+                let formatted = digits;
+                if (digits.length > 6) {
+                  formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+                } else if (digits.length > 3) {
+                  formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+                } else if (digits.length > 0) {
+                  formatted = `(${digits}`;
+                }
+                setAnswers({ ...answers, phoneNumber: formatted });
+              }}
+              placeholder="(814) 222-2222"
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+                ${getError("phoneNumber") ? "bg-red-200" : "border-Teal-400"}`}
+            />
+            {getError("phoneNumber") && (
+              <div className="text-red-600 mt-1">{getError("phoneNumber")}</div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              const rawPhone = answers.phoneNumber?.replace(/\D/g, '');
+              const errors = {};
+              if (!answers.firstName || answers.firstName.trim() === "") {
+                errors.firstName = "Please enter your first name.";
+              }
+              if (!answers.lastName || answers.lastName.trim() === "") {
+                errors.lastName = "Please enter your last name.";
+              }
+              if (!rawPhone || rawPhone.length !== 10) {
+                errors.phoneNumber = "Please enter a valid 10-digit US phone number.";
+              }
+              if (Object.keys(errors).length > 0) {
+                setFieldError(errors);
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setCurrent((c) => c + 1);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Continue
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    case 10:
+      return (
+        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+          <h2 className="question-header">{question?.text || "What is your email address?"}</h2>
+          <div className="mb-4 text-left">
+            <label className="block mb-1 font-medium text-Teal-700">Email Address</label>
+            <input
+              type="email"
+              value={answers.email || ''}
+              onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
+              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+                ${getError("email") ? "bg-red-200" : "border-Teal-400"}`}
+              placeholder="Enter your email"
+            />
+            {getError("email") && (
+              <div className="text-red-600 mt-1">{getError("email")}</div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              const errors = {};
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!answers.email || !emailPattern.test(answers.email)) {
+                errors.email = "Please enter a valid email address.";
+              }
+              if (Object.keys(errors).length > 0) {
+                setFieldError(errors);
+                return;
+              }
+              setFieldError({});
+              setShowTransition(true);
+              setTimeout(() => {
+                setShowTransition(false);
+                setShowThankYou(true);
+              }, 2000);
+            }}
+            className="btn-glosmophobic"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Go back"
+            className="btn-back group"
+          >
+            <span>Back</span>
+          </button>
+        </div>
+      );
+    default:
+      return null;
+  }
 }
