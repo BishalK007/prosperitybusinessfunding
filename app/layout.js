@@ -16,6 +16,9 @@ const geistMono = localFont({
 export const metadata = {
   title: "ProsperityBusinessFinance",
   description: "Get the funding you need to grow your business.",
+  icons:{
+    icon: "/favicon.ico",
+  }
 };
 
 export default function RootLayout({ children }) {

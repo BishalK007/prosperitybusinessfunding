@@ -7,13 +7,13 @@ import { DotBackground } from "@/components/DotBackground";
 import QuestionForm from "@/components/form";
 import ProsperityLogo from "@/components/icon/logo";
 
-// function ProsperityLogo() {
-//   return (
-//     <span>
-//       <ProsperityLogo />
-//     </span>
-//   );
-// }
+function Logo() {
+  return (
+    <span>
+      <ProsperityLogo />
+    </span>
+  );
+}
 
 export default function Home() {
   const [current, setCurrent] = useState(0);
@@ -33,12 +33,12 @@ export default function Home() {
       />
       <nav className="w-full bg-slate-800 border-b border-gray-200 py-6 px-2 flex flex-col items-center gap-0 relative z-10">
         <div className="flex items-center gap-3">
-          <ProsperityLogo />
+          <Logo />
           <div className="flex flex-col items-start">
-            <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-blocktracking-tight leading-none">
+            <span className="text-2xl sm:text-3xl font-extrabold colorChange1 tracking-tight leading-none">
               PROSPERITY
             </span>
-            <span className="text-base sm:text-lg font-semibold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-block">
+            <span className="text-base sm:text-lg font-semibold colorChange1" style={{ letterSpacing: "0.06em" }}>
               BUSINESS FINANCE
             </span>
           </div>
@@ -113,11 +113,16 @@ export default function Home() {
 
       <footer className="w-full bg-transparent mt-auto pt-8 pb-4 px-2 z-10">
         <div className="max-w-2xl mx-auto border-t border-gray-200 px-4 py-8 flex flex-col items-center">
-          <div className="flex flex-col items-center mb-4">
-            <ProsperityLogo />
-            <span className="text-2xl font-bold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-block">
-              ProsperityBusinessFinance
-            </span>
+          <div className="flex items-center gap-3">
+            <Logo />
+            <div className="flex flex-col items-start">
+              <span className="text-2xl sm:text-3xl font-extrabold colorChange1 tracking-tight leading-none">
+                PROSPERITY
+              </span>
+              <span className="text-base sm:text-lg font-semibold colorChange1" style={{ letterSpacing: "0.06em" }}>
+                BUSINESS FINANCE
+              </span>
+            </div>
           </div>
           <div className="text-gray-400 text-sm text-center">
             © {new Date().getFullYear()} ProsperityBusinessFinance . All rights reserved.

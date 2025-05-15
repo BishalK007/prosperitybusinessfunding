@@ -52,7 +52,7 @@ export const questions = [
   },
   {
     id: "averageRevenue",
-    title: "What's your average monthly revenue??",
+    title: "What's your average monthly revenue?",
     // inputType: "number",
     // validation: "positiveNumber",
     // nextButton: true,
@@ -73,7 +73,7 @@ export const questions = [
   },
   {
     id: 'businessStartDate',
-    text: 'When did you start your business??'
+    text: 'When did you start your business?'
   },
   {
     id: 'industry',

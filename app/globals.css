@@ -193,3 +193,16 @@ input[type='range']::-ms-fill-upper {
   font-size: 2rem;
   padding-bottom: 2px;
 }
+
+.input-field {
+  @apply bg-Orange-100 text-Teal-700 font-semibold w-full p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-Cyan-100;
+}
+
+.colorChange1 {
+  background: linear-gradient(to right, #0891b2, #14b8a6); /* from-Cyan-600 to-Teal-600 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}

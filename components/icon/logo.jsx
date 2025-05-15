@@ -2,23 +2,24 @@ import * as React from "react";
 
 const ProsperityLogo = (props) => (
   <svg
-    width={48}
-    height={48}
-    viewBox="0 0 48 48"
-    fill="none"
-    aria-label="Prosperity Logo"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 500 500"
+    width={props.width || 64}
+    height={props.height || 64}
+    aria-label="ProsperityBusinessFunding Logo"
     {...props}
   >
-    <defs>
-      <linearGradient id="prosperity-p-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#0ab5a3" />
-        <stop offset="1" stopColor="#067a6e" />
-      </linearGradient>
-    </defs>
     <path
-      d="M8 6h14c7 0 11 4 11 10s-4 10-11 10h-7v12H8V6zm14 14c4 0 6-2 6-4s-2-4-6-4h-7v8h7z"
-      fill="url(#prosperity-p-gradient)"
+      style={{ stroke: "rgb(0, 0, 0)", fill: "rgb(255, 255, 255)" }}
+      d="M 171.917 69.196 L 171.691 188.887 L 306.978 189.329 L 302.862 68.816 C 302.862 68.816 172.547 68.961 171.917 69.196 Z"
+    />
+    <path
+      style={{ fill: "rgb(0, 167, 157)" }}
+      d="M 127.262 21.039 L 127.207 377.915 C 127.224 378.01 124.539 461.252 228.52 485.107 C 228.978 449.4 229.289 296.981 229.289 296.981 C 229.289 296.981 282.74 298.799 291.684 295.237 C 299.754 300.778 176.931 187.277 176.978 186.13 L 176.08 71.481 L 290.369 71.611 L 403.892 186.422 C 407.918 189.371 428.341 42.186 273.988 22.085 C 116.499 19.61 126.892 22.33 127.262 21.039 Z"
+    />
+    <path
+      style={{ fill: "rgb(46, 49, 146)", paintOrder: "fill" }}
+      d="M 290.86 71.538 L 291.5 122.859 L 227.944 123.607 L 227.731 186.638 C 227.731 186.638 177.079 186.511 177.079 186.337 C 177.079 186.163 291.854 295.173 291.854 295.173 C 344.991 290.513 401.755 229.723 404.088 186.46 C 404.418 186.769 291.406 71.336 290.86 71.538 Z"
     />
   </svg>
 );

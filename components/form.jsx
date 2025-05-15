@@ -79,19 +79,26 @@ export default function QuestionForm({
         </section>
       );
     case 1:
+      // Set default value to 500000
+      const min = 10000;
+      const max = 1000000;
+      const defaultValue = 500000;
+      const value = answers[question.id] ?? defaultValue;
+      const percent = ((value - min) / (max - min)) * 100;
+
       return (
         <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
           <h2 className="question-header">{question?.text || "How much do you need?"}</h2>
           <div className="text-4xl font-bold text-Cyan-600 mb-4">
-            ${Number(answers[question.id] || 640000).toLocaleString()}
+            ${Number(value).toLocaleString()}
           </div>
           <div className="relative w-full flex items-center justify-center" style={{ height: 56 }}>
             <input
               type="range"
-              min="10000"
-              max="1000000"
+              min={min}
+              max={max}
               step="10000"
-              value={answers[question.id] || 640000}
+              value={value}
               onChange={(e) =>
                 setAnswers({
                   ...answers,
@@ -101,19 +108,19 @@ export default function QuestionForm({
               className="w-full h-3 appearance-none rounded-lg cursor-pointer"
               style={{
                 background: `linear-gradient(
-                  to right,
-                  #067a6e 0%, 
-                  #067a6e ${((answers[question.id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
-                  #5bcdc0 ${((answers[question.id] || 10000) - 10000) / (1000000 - 10000) * 100}%,
-                  #5bcdc0 100%
-                )`,
+              to right,
+              #067a6e 0%, 
+              #067a6e ${percent}%,
+              #5bcdc0 ${percent}%,
+              #5bcdc0 100%
+            )`,
               }}
               id="money-slider"
             />
             <span
               style={{
                 position: "absolute",
-                left: `calc(${((answers[question.id] || 640000) - 10000) / (1000000 - 10000) * 100}% - 14px)`,
+                left: `calc(${percent}% - 14px)`,
                 top: "50%",
                 transform: "translateY(-50%)",
                 zIndex: 2,
@@ -150,7 +157,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -166,7 +173,7 @@ export default function QuestionForm({
                 [question.id]: e.target.value,
               })
             }
-            className="bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+            className="input-field mb-3"
           >
             <option value="" disabled>Select one</option>
             {(question.options || []).map((opt) => (
@@ -199,7 +206,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -235,7 +242,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -256,7 +263,7 @@ export default function QuestionForm({
                   setFieldError({ [question.id]: "Please enter a value less than $10 million." });
                 }
               }}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-4 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+              className={`input-field
                 ${getError(question.id) ? "bg-red-200" : "border-Teal-700"}`}
               placeholder="Enter amount"
             />
@@ -287,7 +294,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -323,7 +330,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -337,7 +344,7 @@ export default function QuestionForm({
               type="text"
               value={answers.businessName || ""}
               onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+              className={`input-field
                 ${getError("businessName") ? "bg-red-200" : "border-Teal-400"}`}
               placeholder="Enter your business name"
             />
@@ -368,8 +375,8 @@ export default function QuestionForm({
                   setFieldError({ ...fieldError, businessZip: "" });
                 }
               }}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
-                ${getError("businessZip") ? "bg-red-200" : "border-green-600"}`}
+              className={`input-field
+                ${getError("businessZip") ? "bg-red-200" : "border-Cyan-600"}`}
               placeholder="Enter 5-digit ZIP code"
             />
             {getError("businessZip") && (
@@ -397,7 +404,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -410,7 +417,7 @@ export default function QuestionForm({
             <select
               value={answers.startMonth || ''}
               onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+              className={`input-field
                 ${getError("startMonth") ? "bg-red-200" : "border-green-600"}`}
             >
               <option value="">Select month</option>
@@ -430,11 +437,11 @@ export default function QuestionForm({
             <select
               value={answers.startYear || ''}
               onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 
+              className={`input-field
                 ${getError("startYear") ? "bg-red-200" : "border-Teal-400"}`}
             >
               <option value="">Select year</option>
-              {Array.from({ length: 30 }, (_, i) => {
+              {Array.from({ length: new Date().getFullYear() - 1800 + 1 }, (_, i) => {
                 const year = new Date().getFullYear() - i;
                 return <option key={year} value={year}>{year}</option>;
               })}
@@ -469,7 +476,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -482,7 +489,7 @@ export default function QuestionForm({
             <select
               value={answers.industry || ''}
               onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+              className={`input-field
                 ${getError("industry") ? "bg-red-200" : "border-Teal-400"}`}
             >
               <option value="">Select an industry</option>
@@ -535,7 +542,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -549,7 +556,7 @@ export default function QuestionForm({
               type="text"
               value={answers.firstName || ''}
               onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+              className={`input-field
                 ${getError("firstName") ? "bg-red-200" : "border-Teal-400"}`}
               placeholder="Enter your first name"
             />
@@ -563,7 +570,7 @@ export default function QuestionForm({
               type="text"
               value={answers.lastName || ''}
               onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+              className={`input-field
                 ${getError("lastName") ? "bg-red-200" : "border-Teal-400"}`}
               placeholder="Enter your last name"
             />
@@ -593,7 +600,7 @@ export default function QuestionForm({
                 setAnswers({ ...answers, phoneNumber: formatted });
               }}
               placeholder="(814) 222-2222"
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+              className={`input-field
                 ${getError("phoneNumber") ? "bg-red-200" : "border-Teal-400"}`}
             />
             {getError("phoneNumber") && (
@@ -634,7 +641,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
@@ -648,7 +655,7 @@ export default function QuestionForm({
               type="email"
               value={answers.email || ''}
               onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
-              className={`bg-Orange-100 text-Teal-700 font-semibold w-full p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500
+              className={`input-field
                 ${getError("email") ? "bg-red-200" : "border-Teal-400"}`}
               placeholder="Enter your email"
             />
@@ -684,7 +691,7 @@ export default function QuestionForm({
             aria-label="Go back"
             className="btn-back group"
           >
-            <span>Back</span>
+            <span className="colorChange1">Back</span>
           </button>
         </div>
       );
