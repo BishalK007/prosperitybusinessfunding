@@ -5,14 +5,15 @@ import { questions } from "@/data/questions";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { DotBackground } from "@/components/DotBackground";
 import QuestionForm from "@/components/form";
+import ProsperityLogo from "@/components/icon/logo";
 
-function ProsperityLogo() {
-  return (
-    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-Cyan-600 to-Teal-600 text-white font-extrabold text-3xl select-none">
-      P {/* TODO: Add logo text or icon here  */}
-    </span>
-  );
-}
+// function ProsperityLogo() {
+//   return (
+//     <span>
+//       <ProsperityLogo />
+//     </span>
+//   );
+// }
 
 export default function Home() {
   const [current, setCurrent] = useState(0);
@@ -30,12 +31,12 @@ export default function Home() {
         className="fixed inset-0 w-full h-full z-0"
         dotColor="#e0e7ef"
       />
-      <nav className="w-full bg-slate-800/20 border-b border-gray-200 py-6 px-2 flex flex-col items-center gap-0 relative z-10">
+      <nav className="w-full bg-slate-800 border-b border-gray-200 py-6 px-2 flex flex-col items-center gap-0 relative z-10">
         <div className="flex items-center gap-3">
           <ProsperityLogo />
           <div className="flex flex-col items-start">
             <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-blocktracking-tight leading-none">
-              ROSPERITY
+              PROSPERITY
             </span>
             <span className="text-base sm:text-lg font-semibold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-block">
               BUSINESS FINANCE
@@ -50,10 +51,18 @@ export default function Home() {
             Question {current + 1} of {totalQuestions}
           </div>
           <div className="w-full flex justify-center py-1 relative z-10">
-            <div className="w-1/3 bg-gray-100 shadow-md shadow-gray-400/50 border-2 border-teal-200/50  h-2.5 dark:bg-gray-300 rounded-full overflow-hidden">
+            <div
+              className="w-1/3 shadow-md shadow-gray-400/50 h-2 dark:bg-gray-300 rounded-full overflow-hidden"
+              style={{
+                background: "linear-gradient(90deg, #f3f4f6 0%, #d1d5db 100%)"
+              }}
+            >
               <div
-                className="bg-green-600 h-1.5 transition-all duration-500 ease-out"
-                style={{ width: `${progressPercentage}%` }}
+                className="h-1.5 transition-all duration-500 ease-out"
+                style={{
+                  width: `${progressPercentage}%`,
+                  background: "linear-gradient(90deg, #00c49a 0%, #067a6e 100%)"
+                }}
               ></div>
             </div>
           </div>
@@ -64,7 +73,7 @@ export default function Home() {
         {showThankYou ? (
           <div className="bg-transparent rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
             <DotLottieReact
-              src="https://lottie.host/a0285ded-f43b-4af6-9edd-ec684f80071f/t5RejRJf3j.lottie"
+              src="/assets/Animation complete - 1746205531229.lottie"
               loop
               autoplay
               mute
@@ -102,8 +111,8 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="w-full bg-neutral-500/10 mt-auto relative z-10">
-        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col items-center">
+      <footer className="w-full bg-transparent mt-auto pt-8 pb-4 px-2 z-10">
+        <div className="max-w-2xl mx-auto border-t border-gray-200 px-4 py-8 flex flex-col items-center">
           <div className="flex flex-col items-center mb-4">
             <ProsperityLogo />
             <span className="text-2xl font-bold bg-gradient-to-r from-Cyan-600 to-Teal-600 bg-clip-text text-transparent inline-block">

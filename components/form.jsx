@@ -69,8 +69,8 @@ export default function QuestionForm({
                       }, 2000);
                     }}
                   >
-                    {Icon && <Icon className="text-Teal-500" size={32} />}
-                    <p className="text-lg font-medium text-Teal-600">{type}</p>
+                    {Icon && <Icon className="text-Teal-500" size={50} />}
+                    <p className="text-base font-medium text-Teal-600">{type}</p>
                   </div>
                 );
               })}
