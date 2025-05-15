@@ -4,8 +4,8 @@ const ProsperityLogo = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 500 500"
-    width={props.width || 64}
-    height={props.height || 64}
+    width={props.width || 55}
+    height={props.height || 55}
     aria-label="ProsperityBusinessFunding Logo"
     {...props}
   >
