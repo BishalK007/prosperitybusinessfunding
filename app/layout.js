@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "velocitybusinessfunding",
+  title: "ProsperityBusinessFinance",
   description: "Get the funding you need to grow your business.",
 };
 
