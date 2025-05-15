@@ -195,7 +195,7 @@ input[type='range']::-ms-fill-upper {
 }
 
 .input-field {
-  @apply bg-Orange-100 text-Teal-700 font-semibold w-full p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-Cyan-100;
+  @apply bg-Orange-100 text-Teal-700 font-semibold border-2 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-Cyan-100;
 }
 
 .colorChange1 {
@@ -205,4 +205,12 @@ input[type='range']::-ms-fill-upper {
   background-clip: text;
   color: transparent;
   display: inline-block;
+}
+
+.question-BG {
+  padding: 1.5rem;          
+  text-align: center;          
+  max-width: 36rem;          
+  margin-left: auto;          
+  margin-right: auto;           
 }

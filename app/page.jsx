@@ -58,7 +58,7 @@ export default function Home() {
               }}
             >
               <div
-                className="h-1.5 transition-all duration-500 ease-out"
+                className="h-full transition-all duration-500 ease-out"
                 style={{
                   width: `${progressPercentage}%`,
                   background: "linear-gradient(90deg, #00c49a 0%, #067a6e 100%)"
@@ -71,7 +71,7 @@ export default function Home() {
 
       <div className="flex-1 flex items-center justify-center px-2 py-4 relative z-10">
         {showThankYou ? (
-          <div className="bg-transparent rounded-xl shadow-lg p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
+          <div className="p-10 w-full max-w-lg flex flex-col items-center justify-center text-center z-10">
             <DotLottieReact
               src="/assets/Animation complete - 1746205531229.lottie"
               loop
@@ -81,7 +81,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-Teal-700 mb-2">
               Your responses have been recorded
             </h2>
-            <p className="text-Teal-600">We will get back to you soon.</p>
+            <p className="text-Teal-600 text-lg">We will get back to you soon.</p>
           </div>
         ) : showTransition ? (
           <div className="flex items-center justify-center">
@@ -111,7 +111,7 @@ export default function Home() {
         )}
       </div>
 
-      <footer className="w-full bg-transparent mt-auto pt-8 pb-4 px-2 z-10">
+      <footer className="w-full bg-transparent mt-auto pt-4 pb-4 px-2 z-10">
         <div className="max-w-2xl mx-auto border-t border-gray-200 px-4 py-8 flex flex-col items-center">
           <div className="flex items-center gap-[2px]">
             <Logo />
@@ -124,7 +124,7 @@ export default function Home() {
               </span>
             </div>
           </div>
-          <div className="text-gray-400 text-sm text-center">
+          <div className="text-gray-400 text-sm text-center mt-3">
             © {new Date().getFullYear()} ProsperityBusinessFinance . All rights reserved.
           </div>
         </div>

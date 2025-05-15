@@ -87,7 +87,7 @@ export default function QuestionForm({
       const percent = ((value - min) / (max - min)) * 100;
 
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "How much do you need?"}</h2>
           <div className="text-4xl font-bold text-Cyan-600 mb-4">
             ${Number(value).toLocaleString()}
@@ -163,7 +163,7 @@ export default function QuestionForm({
       );
     case 2:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "What are you getting finance for?"}</h2>
           <select
             value={answers[question.id] || ""}
@@ -212,7 +212,7 @@ export default function QuestionForm({
       );
     case 3:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "How quickly do you need the money?"}</h2>
           <div className="flex flex-col gap-3">
             {(question.options || []).map((option) => (
@@ -248,7 +248,7 @@ export default function QuestionForm({
       );
     case 4:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "What's your average monthly revenue?"}</h2>
           <div className="mb-4">
             <input
@@ -264,7 +264,7 @@ export default function QuestionForm({
                 }
               }}
               className={`input-field
-                ${getError(question.id) ? "bg-red-200" : "border-Teal-700"}`}
+                ${getError(question.id) ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter amount"
             />
           </div>
@@ -300,7 +300,7 @@ export default function QuestionForm({
       );
     case 5:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "What is your personal credit score?"}</h2>
           <div className="flex flex-col gap-3">
             {(question.options || []).map((option) => (
@@ -336,7 +336,7 @@ export default function QuestionForm({
       );
     case 6:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "Tell us about your business"}</h2>
           <div className="mb-4 text-left">
             <label className="block mb-1 font-medium text-Teal-700">Business Name</label>
@@ -345,7 +345,7 @@ export default function QuestionForm({
               value={answers.businessName || ""}
               onChange={(e) => setAnswers({ ...answers, businessName: e.target.value })}
               className={`input-field
-                ${getError("businessName") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("businessName") ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter your business name"
             />
             {getError("businessName") && (
@@ -376,7 +376,7 @@ export default function QuestionForm({
                 }
               }}
               className={`input-field
-                ${getError("businessZip") ? "bg-red-200" : "border-Cyan-600"}`}
+                ${getError("businessZip") ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter 5-digit ZIP code"
             />
             {getError("businessZip") && (
@@ -410,7 +410,7 @@ export default function QuestionForm({
       );
     case 7:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "When did you start your business?"}</h2>
           <div className="mb-4 text-left">
             <label className="block mb-1 font-medium text-Teal-700">Start Month</label>
@@ -418,7 +418,7 @@ export default function QuestionForm({
               value={answers.startMonth || ''}
               onChange={(e) => setAnswers({ ...answers, startMonth: e.target.value })}
               className={`input-field
-                ${getError("startMonth") ? "bg-red-200" : "border-green-600"}`}
+                ${getError("startMonth") ? "bg-red-200" : "border-gray-200"}`}
             >
               <option value="">Select month</option>
               {[
@@ -438,7 +438,7 @@ export default function QuestionForm({
               value={answers.startYear || ''}
               onChange={(e) => setAnswers({ ...answers, startYear: e.target.value })}
               className={`input-field
-                ${getError("startYear") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("startYear") ? "bg-red-200" : "border-gray-200"}`}
             >
               <option value="">Select year</option>
               {Array.from({ length: new Date().getFullYear() - 1800 + 1 }, (_, i) => {
@@ -482,7 +482,7 @@ export default function QuestionForm({
       );
     case 8:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "What industry are you in?"}</h2>
           <div className="mb-4 text-left">
             <label className="block mb-1 font-medium text-Teal-700">Industry</label>
@@ -490,7 +490,7 @@ export default function QuestionForm({
               value={answers.industry || ''}
               onChange={(e) => setAnswers({ ...answers, industry: e.target.value })}
               className={`input-field
-                ${getError("industry") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("industry") ? "bg-red-200" : "border-gray-200"}`}
             >
               <option value="">Select an industry</option>
               <option>Accommodation and Food Services</option>
@@ -548,7 +548,7 @@ export default function QuestionForm({
       );
     case 9:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "Tell us about yourself"}</h2>
           <div className="mb-4 text-left">
             <label className="block mb-1 font-medium text-Teal-700">First Name</label>
@@ -557,7 +557,7 @@ export default function QuestionForm({
               value={answers.firstName || ''}
               onChange={(e) => setAnswers({ ...answers, firstName: e.target.value })}
               className={`input-field
-                ${getError("firstName") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("firstName") ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter your first name"
             />
             {getError("firstName") && (
@@ -571,7 +571,7 @@ export default function QuestionForm({
               value={answers.lastName || ''}
               onChange={(e) => setAnswers({ ...answers, lastName: e.target.value })}
               className={`input-field
-                ${getError("lastName") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("lastName") ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter your last name"
             />
             {getError("lastName") && (
@@ -601,7 +601,7 @@ export default function QuestionForm({
               }}
               placeholder="(814) 222-2222"
               className={`input-field
-                ${getError("phoneNumber") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("phoneNumber") ? "bg-red-200" : "border-gray-200"}`}
             />
             {getError("phoneNumber") && (
               <div className="text-red-600 mt-1">{getError("phoneNumber")}</div>
@@ -647,7 +647,7 @@ export default function QuestionForm({
       );
     case 10:
       return (
-        <div className="p-6 bg-transparent rounded-xl shadow-md text-center max-w-xl mx-auto">
+        <div className="question-BG">
           <h2 className="question-header">{question?.text || "What is your email address?"}</h2>
           <div className="mb-4 text-left">
             <label className="block mb-1 font-medium text-Teal-700">Email Address</label>
@@ -656,7 +656,7 @@ export default function QuestionForm({
               value={answers.email || ''}
               onChange={(e) => setAnswers({ ...answers, email: e.target.value })}
               className={`input-field
-                ${getError("email") ? "bg-red-200" : "border-Teal-400"}`}
+                ${getError("email") ? "bg-red-200" : "border-gray-200"}`}
               placeholder="Enter your email"
             />
             {getError("email") && (
